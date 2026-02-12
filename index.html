@@ -79,29 +79,48 @@
     }
     .btn-primary { background: #111827; color: white; }
     .btn-primary:hover { background: #1f2937; transform: translateY(-1px); }
-    .btn-google,
-    #savedEmailBtn {
-      background: white;
-      border: 1px solid #d1d5db;
-      color: #111827;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 12px;
-      height: 50px;
-      font-size: 16px;
-      font-weight: 500;
-      border-radius: 4px;
-      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-      max-width: 400px;
+
+    /* === FORÇANDO MESMO TAMANHO PARA OS DOIS BOTÕES (Google oficial + custom) === */
+    .google-button-wrapper,
+    #savedEmailWrapper {
+      width: 100%;
+      max-width: 380px;
       margin: 12px auto;
+      text-align: center;
     }
-    .btn-google:hover,
-    #savedEmailBtn:hover {
-      background: #f8f9fa;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+
+    .g_id_signin,
+    #savedEmailBtn,
+    .btn-google {
+      width: 100% !important;
+      max-width: 380px !important;
+      height: 50px !important;
+      min-height: 50px !important;
+      line-height: 50px !important;
+      font-size: 16px !important;
+      font-weight: 500 !important;
+      padding: 0 24px !important;
+      border-radius: 4px !important;
+      box-sizing: border-box !important;
+      display: flex !important;
+      align-items: center !important;
+      justify-content: center !important;
+      gap: 12px !important;
+      margin: 0 auto !important;
+      background: white !important;
+      border: 1px solid #d1d5db !important;
+      color: #111827 !important;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1) !important;
+      cursor: pointer !important;
     }
-    .google-button-wrapper { margin: 1.5rem 0; text-align: center; }
+
+    .g_id_signin:hover,
+    #savedEmailBtn:hover,
+    .btn-google:hover {
+      background: #f8f9fa !important;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.15) !important;
+    }
+
     .toggle-link { text-align: center; margin-top: 1.5rem; font-size: 0.95rem; color: #6b7280; }
     .toggle-link a { color: #374151; font-weight: 500; text-decoration: none; }
     .toggle-link a:hover { text-decoration: underline; }
