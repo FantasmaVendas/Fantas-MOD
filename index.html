@@ -77,10 +77,13 @@
       transition: all 0.25s ease;
       margin: 0.8rem 0;
     }
+    .btn:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
     .btn-primary { background: #111827; color: white; }
-    .btn-primary:hover { background: #1f2937; transform: translateY(-1px); }
+    .btn-primary:hover:not(:disabled) { background: #1f2937; transform: translateY(-1px); }
 
-    /* === FORÇANDO MESMO TAMANHO PARA OS DOIS BOTÕES (Google oficial + custom) === */
     .google-button-wrapper,
     #savedEmailWrapper {
       width: 100%;
@@ -127,6 +130,78 @@
     .cadastro-only { display: none; }
     .is-cadastro .cadastro-only { display: block; }
     .is-cadastro .login-only { display: none; }
+
+    /* Modal de Verificação */
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.5);
+      z-index: 1000;
+      align-items: center;
+      justify-content: center;
+    }
+    .modal.active { display: flex; }
+    .modal-content {
+      background: white;
+      padding: 2.5rem;
+      border-radius: 16px;
+      max-width: 400px;
+      width: 90%;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+      text-align: center;
+    }
+    .modal-content h2 { margin-bottom: 1rem; color: #111827; font-size: 1.5rem; }
+    .modal-content p { color: #6b7280; margin-bottom: 1.5rem; }
+    .code-input {
+      font-size: 2rem;
+      letter-spacing: 0.8rem;
+      text-align: center;
+      font-weight: bold;
+      font-family: monospace;
+      padding: 1rem;
+      margin: 1.5rem 0;
+    }
+    .resend-link {
+      color: #2563eb;
+      cursor: pointer;
+      text-decoration: underline;
+      font-size: 0.9rem;
+    }
+    .resend-link:hover { color: #1d4ed8; }
+    .alert {
+      padding: 0.8rem;
+      border-radius: 8px;
+      margin-bottom: 1rem;
+      font-size: 0.9rem;
+    }
+    .alert-success {
+      background: #d1fae5;
+      color: #065f46;
+      border: 1px solid #6ee7b7;
+    }
+    .alert-error {
+      background: #fee2e2;
+      color: #991b1b;
+      border: 1px solid #fca5a5;
+    }
+    .loader {
+      border: 3px solid #f3f4f6;
+      border-top: 3px solid #111827;
+      border-radius: 50%;
+      width: 24px;
+      height: 24px;
+      animation: spin 1s linear infinite;
+      display: inline-block;
+      margin-left: 10px;
+    }
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
   </style>
 </head>
 <body>
@@ -137,6 +212,8 @@
       <h1 id="formTitle">Entrar</h1>
       <p id="formSubtitle">Use sua conta Google ou credenciais</p>
     </div>
+
+    <div id="alertBox"></div>
 
     <form id="authForm">
 
@@ -205,12 +282,36 @@
 
   </div>
 
+  <!-- Modal de Verificação -->
+  <div class="modal" id="verificationModal">
+    <div class="modal-content">
+      <h2>📧 Verifique seu email</h2>
+      <p>Enviamos um código de 6 dígitos para<br><strong id="emailSent"></strong></p>
+      
+      <input type="text" 
+             id="codeInput" 
+             class="code-input" 
+             maxlength="6" 
+             placeholder="000000"
+             autocomplete="off">
+      
+      <button class="btn btn-primary" id="verifyBtn">Verificar código</button>
+      
+      <p style="margin-top: 1.5rem; font-size: 0.85rem;">
+        Não recebeu? <span class="resend-link" id="resendCode">Reenviar código</span>
+      </p>
+    </div>
+  </div>
+
   <script>
+    const API_URL = 'http://localhost:3000/api';
+
     if (localStorage.getItem('userLoggedIn') === 'true') {
       window.location.href = 'dashboard.html';
     }
 
     let isCadastro = false;
+    let currentEmail = '';
     const toggleMode = document.getElementById('toggleMode');
     const authContainer = document.getElementById('authContainer');
     const formTitle = document.getElementById('formTitle');
@@ -218,6 +319,8 @@
     const submitBtn = document.getElementById('submitBtn');
     const toggleText = document.getElementById('toggleText');
     const googleBtn = document.getElementById('googleBtn');
+    const verificationModal = document.getElementById('verificationModal');
+    const alertBox = document.getElementById('alertBox');
 
     toggleMode.addEventListener('click', (e) => {
       e.preventDefault();
@@ -282,32 +385,153 @@
         email: payload.email,
         picture: payload.picture || '',
         loginMethod: 'google',
-        loggedIn: true
+        loggedIn: true,
+        verified: true
       };
       localStorage.setItem('userData', JSON.stringify(user));
       localStorage.setItem('userLoggedIn', 'true');
       window.location.href = 'dashboard.html';
     }
 
-    document.getElementById('authForm').addEventListener('submit', (e) => {
+    function showAlert(message, type = 'error') {
+      alertBox.innerHTML = `<div class="alert alert-${type}">${message}</div>`;
+      setTimeout(() => { alertBox.innerHTML = ''; }, 5000);
+    }
+
+    async function sendVerificationCode(email) {
+      try {
+        submitBtn.disabled = true;
+        submitBtn.innerHTML = 'Enviando... <span class="loader"></span>';
+
+        const response = await fetch(`${API_URL}/send-verification`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email })
+        });
+
+        const data = await response.json();
+
+        if (data.success) {
+          currentEmail = email;
+          document.getElementById('emailSent').textContent = email;
+          verificationModal.classList.add('active');
+          document.getElementById('codeInput').value = '';
+          document.getElementById('codeInput').focus();
+        } else {
+          showAlert(data.message || 'Erro ao enviar código', 'error');
+        }
+
+      } catch (error) {
+        showAlert('Erro de conexão com o servidor', 'error');
+      } finally {
+        submitBtn.disabled = false;
+        submitBtn.textContent = isCadastro ? 'Criar conta' : 'Entrar';
+      }
+    }
+
+    document.getElementById('authForm').addEventListener('submit', async (e) => {
       e.preventDefault();
       const email = document.getElementById('email').value;
       const password = document.getElementById('password').value;
+      const passwordConfirm = document.getElementById('passwordConfirm')?.value;
 
-      if (email && password.length >= 4) {
+      if (!email || !password) {
+        showAlert('Preencha todos os campos!', 'error');
+        return;
+      }
+
+      if (password.length < 6) {
+        showAlert('A senha deve ter pelo menos 6 caracteres!', 'error');
+        return;
+      }
+
+      if (isCadastro) {
+        if (password !== passwordConfirm) {
+          showAlert('As senhas não coincidem!', 'error');
+          return;
+        }
+        // Enviar código de verificação
+        await sendVerificationCode(email);
+      } else {
+        // Login direto (sem verificação)
         const user = {
           name: document.getElementById('nome')?.value || email.split('@')[0],
           email: email,
           picture: '',
           loginMethod: 'email',
-          loggedIn: true
+          loggedIn: true,
+          verified: false
         };
         localStorage.setItem('userData', JSON.stringify(user));
         localStorage.setItem('userLoggedIn', 'true');
         window.location.href = 'dashboard.html';
-      } else {
-        alert('Preencha email e senha corretamente!');
       }
+    });
+
+    // Verificar código
+    document.getElementById('verifyBtn').addEventListener('click', async () => {
+      const code = document.getElementById('codeInput').value.trim();
+
+      if (code.length !== 6) {
+        showAlert('Digite o código de 6 dígitos', 'error');
+        return;
+      }
+
+      try {
+        const verifyBtn = document.getElementById('verifyBtn');
+        verifyBtn.disabled = true;
+        verifyBtn.innerHTML = 'Verificando... <span class="loader"></span>';
+
+        const response = await fetch(`${API_URL}/verify-code`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email: currentEmail, code })
+        });
+
+        const data = await response.json();
+
+        if (data.success) {
+          // Criar usuário verificado
+          const user = {
+            name: document.getElementById('nome')?.value || currentEmail.split('@')[0],
+            email: currentEmail,
+            picture: '',
+            loginMethod: 'email',
+            loggedIn: true,
+            verified: true
+          };
+          localStorage.setItem('userData', JSON.stringify(user));
+          localStorage.setItem('userLoggedIn', 'true');
+          
+          verificationModal.classList.remove('active');
+          showAlert('✅ Conta criada com sucesso!', 'success');
+          
+          setTimeout(() => {
+            window.location.href = 'dashboard.html';
+          }, 1000);
+
+        } else {
+          showAlert(data.message || 'Código incorreto', 'error');
+          verifyBtn.disabled = false;
+          verifyBtn.textContent = 'Verificar código';
+        }
+
+      } catch (error) {
+        showAlert('Erro de conexão com o servidor', 'error');
+        document.getElementById('verifyBtn').disabled = false;
+        document.getElementById('verifyBtn').textContent = 'Verificar código';
+      }
+    });
+
+    // Reenviar código
+    document.getElementById('resendCode').addEventListener('click', async () => {
+      await sendVerificationCode(currentEmail);
+      showAlert('Novo código enviado!', 'success');
+    });
+
+    // Auto-focus no input de código quando modal abrir
+    document.getElementById('codeInput').addEventListener('input', (e) => {
+      e.target.value = e.target.value.replace(/\D/g, '');
     });
   </script>
 
