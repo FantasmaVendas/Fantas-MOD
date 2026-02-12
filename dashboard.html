@@ -57,6 +57,7 @@
       box-shadow: 0 4px 12px rgba(0,0,0,0.08);
       overflow: hidden;
       transition: transform 0.2s, box-shadow 0.2s;
+      text-align: center;
     }
     .card:hover {
       transform: translateY(-6px);
@@ -64,7 +65,7 @@
     }
     .card-header {
       background: #f3f4f6;
-      padding: 1.2rem;
+      padding: 1rem;
       font-size: 1.3rem;
       font-weight: 700;
       color: #111827;
@@ -72,16 +73,19 @@
     .card-body {
       padding: 1.5rem;
     }
-    .card-body img {
-      width: 100%;
-      height: 180px;
-      object-fit: cover;
-      border-radius: 8px;
-      margin-bottom: 1rem;
+    .game-icon {
+      width: 72px;
+      height: 72px;
+      object-fit: contain; /* ou 'cover' se quiser cortar bordas */
+      border-radius: 50%;
+      margin: 1.2rem auto;
+      border: 2px solid #e5e7eb;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
     }
     .card-body p {
-      margin: 0 0 1rem 0;
+      margin: 0.5rem 0 1.2rem 0;
       color: #4b5563;
+      font-size: 0.95rem;
     }
     .btn-download {
       display: inline-block;
@@ -123,13 +127,14 @@
       <div class="card">
         <div class="card-header">Power Warriors 19.7</div>
         <div class="card-body">
-          <!-- Cole o link direto aqui (ex: https://i.imgur.com/HPt3pj0.png) -->
-          <img src="https://i.imgur.com/HPt3pj0.png" alt="Power Warriors">
-          <!-- Se não carregar, substitua pelo link direto que você copiou do navegador -->
+          <!-- Imagem local 72x72 px, redonda -->
+          <img src="powerwarrios.png" alt="Power Warriors" class="game-icon">
           <p>Versão 19.7 - Modo história completo + personagens desbloqueados</p>
           <a href="https://www.mediafire.com/file/hjd4zyv8hrjfrxk/Power+Warriors_19.7.apk/file" target="_blank" class="btn-download">Baixar APK (19.7)</a>
         </div>
       </div>
+
+      <!-- Adicione mais cards aqui no futuro -->
 
     </div>
 
