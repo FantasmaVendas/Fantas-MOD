@@ -3,38 +3,36 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Login & Cadastro - Com Google</title>
+  <title>Login & Cadastro</title>
 
-  <!-- Biblioteca oficial Google Identity Services -->
+  <!-- Google Identity Services -->
   <script src="https://accounts.google.com/gsi/client" async defer></script>
 
   <style>
     * { margin:0; padding:0; box-sizing:border-box; }
     body {
-      font-family: system-ui, -apple-system, sans-serif;
+      font-family: system-ui, sans-serif;
       min-height: 100vh;
-      background: linear-gradient(135deg, #e5e7eb 0%, #f3f4f6 50%, #e5e7eb 100%);
+      background: linear-gradient(135deg, #e5e7eb, #f3f4f6, #e5e7eb);
       display: flex;
       align-items: center;
       justify-content: center;
       padding: 20px;
       color: #111827;
     }
-    .auth-container {
+    .container {
       background: white;
       width: 100%;
       max-width: 420px;
       padding: 2.5rem 2.2rem;
       border-radius: 16px;
-      box-shadow: 0 10px 25px -5px rgba(0,0,0,0.1), 0 10px 10px -5px rgba(0,0,0,0.04);
+      box-shadow: 0 10px 25px -5px rgba(0,0,0,0.1);
       border: 1px solid #e5e7eb;
-      transition: transform 0.2s ease;
     }
-    .auth-container:hover { transform: translateY(-4px); }
     .header { text-align: center; margin-bottom: 2rem; }
-    .header h1 { font-size: 1.85rem; font-weight: 700; color: #111827; margin-bottom: 0.35rem; }
+    .header h1 { font-size: 1.9rem; font-weight: 700; color: #111827; }
     .header p { color: #6b7280; font-size: 0.95rem; }
-    .form-group { margin-bottom: 1.5rem; position: relative; }
+    .form-group { margin-bottom: 1.5rem; }
     label { display: block; margin-bottom: 0.5rem; font-size: 0.9rem; font-weight: 500; color: #374151; }
     input {
       width: 100%;
@@ -43,7 +41,6 @@
       border-radius: 8px;
       font-size: 1rem;
       background: #f9fafb;
-      transition: all 0.2s ease;
     }
     input:focus {
       outline: none;
@@ -52,49 +49,44 @@
       background: white;
     }
     .password-wrapper { position: relative; }
-    .password-wrapper input { padding-right: 3.2rem; }
+    .password-wrapper input { padding-right: 3.5rem; }
     .toggle-password {
       position: absolute;
-      right: 0.9rem;
+      right: 1rem;
       top: 50%;
       transform: translateY(-50%);
       background: none;
       border: none;
-      width: 32px;
-      height: 32px;
       cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
+      font-size: 1.3rem;
     }
-    .toggle-password img { width: 20px; height: 20px; opacity: 0.7; transition: opacity 0.2s; }
-    .toggle-password:hover img { opacity: 1; }
-    .options { display: flex; justify-content: space-between; align-items: center; margin: 1.2rem 0 1.6rem; font-size: 0.9rem; }
-    .remember { display: flex; align-items: center; gap: 0.5rem; color: #4b5563; }
-    .remember input[type="checkbox"] { width: 16px; height: 16px; accent-color: #374151; }
-    .forgot a, .toggle-link a { color: #374151; text-decoration: none; font-weight: 500; }
-    .forgot a:hover, .toggle-link a:hover { text-decoration: underline; color: #111827; }
-    .btn-primary {
+    .btn {
       width: 100%;
       padding: 0.95rem;
-      background: #111827;
-      color: white;
       border: none;
       border-radius: 8px;
       font-size: 1rem;
       font-weight: 600;
       cursor: pointer;
-      transition: all 0.25s ease;
-      margin-bottom: 1rem;
+      margin: 0.8rem 0;
+      transition: all 0.2s;
     }
-    .btn-primary:hover {
-      background: #1f2937;
-      transform: translateY(-1.5px);
-      box-shadow: 0 8px 16px rgba(0,0,0,0.12);
+    .btn-primary { background: #111827; color: white; }
+    .btn-primary:hover { background: #1f2937; transform: translateY(-1px); }
+    .btn-google {
+      background: white;
+      border: 1px solid #d1d5db;
+      color: #111827;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
     }
-    .google-button-wrapper { margin: 1.5rem 0; text-align: center; }
-    .toggle-link { text-align: center; margin-top: 1.6rem; color: #6b7280; font-size: 0.95rem; }
-    .google-callback { margin-top: 1rem; text-align: center; font-size: 0.9rem; color: #4b5563; }
+    .btn-google:hover { background: #f8f9fa; }
+    .google-button-wrapper { margin: 1.5rem 0; }
+    .toggle-link { text-align: center; margin-top: 1.5rem; font-size: 0.95rem; color: #6b7280; }
+    .toggle-link a { color: #374151; font-weight: 500; text-decoration: none; }
+    .toggle-link a:hover { text-decoration: underline; }
     .cadastro-only { display: none; }
     .is-cadastro .cadastro-only { display: block; }
     .is-cadastro .login-only { display: none; }
@@ -102,66 +94,51 @@
 </head>
 <body>
 
-  <div class="auth-container" id="authBox">
+  <div class="container" id="authContainer">
 
     <div class="header">
       <h1 id="formTitle">Entrar</h1>
-      <p id="formSubtitle">Use sua conta ou crie uma nova</p>
+      <p id="formSubtitle">Use sua conta Google ou credenciais</p>
     </div>
 
     <form id="authForm">
 
       <div class="form-group cadastro-only">
         <label for="nome">Nome completo</label>
-        <input type="text" id="nome" placeholder="João Silva" autocomplete="name">
+        <input type="text" id="nome" placeholder="Seu nome" autocomplete="name">
       </div>
 
       <div class="form-group">
         <label for="email">E-mail</label>
-        <input type="email" id="email" placeholder="seuemail@exemplo.com" required autocomplete="email">
+        <input type="email" id="email" placeholder="seuemail@exemplo.com" required>
       </div>
 
       <div class="form-group">
         <label for="password">Senha</label>
         <div class="password-wrapper">
-          <input type="password" id="password" placeholder="••••••••" required autocomplete="current-password">
-          <button type="button" class="toggle-password" id="togglePass">
-            <img src="eye.png" alt="Mostrar senha" id="eyeIcon">
-          </button>
+          <input type="password" id="password" placeholder="••••••••" required>
+          <button type="button" class="toggle-password" id="togglePass">👁️</button>
         </div>
       </div>
 
       <div class="form-group cadastro-only">
         <label for="passwordConfirm">Confirmar senha</label>
         <div class="password-wrapper">
-          <input type="password" id="passwordConfirm" placeholder="••••••••" autocomplete="new-password">
-          <button type="button" class="toggle-password" id="togglePassConfirm">
-            <img src="eye.png" alt="Mostrar senha" id="eyeIconConfirm">
-          </button>
+          <input type="password" id="passwordConfirm" placeholder="••••••••">
+          <button type="button" class="toggle-password" id="togglePassConfirm">👁️</button>
         </div>
       </div>
 
-      <div class="options login-only" id="loginOptions">
-        <label class="remember">
-          <input type="checkbox" id="remember">
-          <span>Lembrar de mim</span>
-        </label>
-        <span class="forgot">
-          <a href="#">Esqueceu a senha?</a>
-        </span>
-      </div>
+      <button type="submit" class="btn btn-primary" id="submitBtn">Entrar</button>
 
-      <button type="submit" class="btn-primary" id="submitBtn">Entrar</button>
-
-      <!-- Área do botão oficial Google (muda texto conforme modo) -->
       <div class="google-button-wrapper">
         <div id="g_id_onload"
              data-client_id="455017979288-segvpalrj7te0k0ue22pek5ku114gt4c.apps.googleusercontent.com"
-             data-callback="handleGoogleCredentialResponse"
+             data-callback="handleGoogleLogin"
              data-auto_prompt="false">
         </div>
         <div class="g_id_signin"
-             id="googleSignInButton"
+             id="googleBtn"
              data-type="standard"
              data-size="large"
              data-theme="outline"
@@ -178,90 +155,105 @@
       <a href="#" id="toggleMode">Criar conta</a>
     </div>
 
-    <div class="google-callback" id="googleCallbackInfo"></div>
-
   </div>
 
   <script>
+    // Verifica se já está logado → redireciona automaticamente
+    if (localStorage.getItem('userLoggedIn') === 'true') {
+      window.location.href = 'dashboard.html';
+    }
+
     // Toggle login / cadastro
+    let isCadastro = false;
     const toggleMode = document.getElementById('toggleMode');
-    const authBox = document.getElementById('authBox');
+    const authContainer = document.getElementById('authContainer');
     const formTitle = document.getElementById('formTitle');
     const formSubtitle = document.getElementById('formSubtitle');
     const submitBtn = document.getElementById('submitBtn');
     const toggleText = document.getElementById('toggleText');
-    const googleButton = document.getElementById('googleSignInButton');
-    let isCadastro = false;
+    const googleBtn = document.getElementById('googleBtn');
 
     toggleMode.addEventListener('click', (e) => {
       e.preventDefault();
       isCadastro = !isCadastro;
 
       if (isCadastro) {
-        authBox.classList.add('is-cadastro');
+        authContainer.classList.add('is-cadastro');
         formTitle.textContent = 'Criar conta';
-        formSubtitle.textContent = 'Preencha os dados ou crie com Google';
+        formSubtitle.textContent = 'Preencha os dados ou use o Google';
         submitBtn.textContent = 'Criar conta';
-        toggleText.textContent = 'Já possui conta?';
+        toggleText.textContent = 'Já tem conta?';
         toggleMode.textContent = 'Fazer login';
-        // Muda texto do botão Google para "Criar conta com Google"
-        googleButton.setAttribute('data-text', 'signup_with');
+        googleBtn.setAttribute('data-text', 'signup_with');
       } else {
-        authBox.classList.remove('is-cadastro');
+        authContainer.classList.remove('is-cadastro');
         formTitle.textContent = 'Entrar';
         formSubtitle.textContent = 'Use sua conta Google ou credenciais';
         submitBtn.textContent = 'Entrar';
         toggleText.textContent = 'Ainda não tem conta?';
         toggleMode.textContent = 'Criar conta';
-        // Volta para "Entrar com Google"
-        googleButton.setAttribute('data-text', 'signin_with');
+        googleBtn.setAttribute('data-text', 'signin_with');
       }
     });
 
-    // Toggle eye/senha
-    function createToggleHandler(inputId, iconId) {
-      return function() {
-        const input = document.getElementById(inputId);
-        const icon = document.getElementById(iconId);
-        if (input.type === 'password') {
-          input.type = 'text';
-          icon.src = 'eye-slash.png';
-          icon.alt = 'Ocultar senha';
-        } else {
-          input.type = 'password';
-          icon.src = 'eye.png';
-          icon.alt = 'Mostrar senha';
-        }
-      };
-    }
-    document.getElementById('togglePass').addEventListener('click', createToggleHandler('password', 'eyeIcon'));
-    document.getElementById('togglePassConfirm').addEventListener('click', createToggleHandler('passwordConfirm', 'eyeIconConfirm'));
+    // Toggle mostrar/ocultar senha
+    document.getElementById('togglePass').addEventListener('click', () => {
+      const input = document.getElementById('password');
+      input.type = input.type === 'password' ? 'text' : 'password';
+    });
+    document.getElementById('togglePassConfirm').addEventListener('click', () => {
+      const input = document.getElementById('passwordConfirm');
+      input.type = input.type === 'password' ? 'text' : 'password';
+    });
 
-    // Callback do Google (recebe ID Token)
-    function handleGoogleCredentialResponse(response) {
+    // Login com Google
+    function handleGoogleLogin(response) {
       const idToken = response.credential;
       const payload = JSON.parse(atob(idToken.split('.')[1]));
-      console.log('Google response:', payload);
 
-      document.getElementById('googleCallbackInfo').innerHTML = `
-        <strong>Logado com Google!</strong><br>
-        Nome: ${payload.name || 'N/A'}<br>
-        Email: ${payload.email}<br>
-        <img src="${payload.picture}" width="60" style="border-radius:50%; margin-top:8px;">
-      `;
+      const userData = {
+        name: payload.name || payload.given_name || 'Usuário',
+        email: payload.email,
+        picture: payload.picture || '',
+        loginMethod: 'google',
+        loggedIn: true
+      };
 
-      // Se estiver no modo CADASTRO → preenche campos automaticamente
-      if (isCadastro) {
-        document.getElementById('nome').value = payload.name || '';
-        document.getElementById('email').value = payload.email || '';
-        // Aqui você pode focar no campo de senha ou submeter o form automaticamente se quiser
-      }
+      // Salva no localStorage
+      localStorage.setItem('userData', JSON.stringify(userData));
+      localStorage.setItem('userLoggedIn', 'true');
 
-      // Envie o idToken para seu backend via fetch para validar e criar sessão/login
-      // fetch('/api/google-auth', { method: 'POST', body: JSON.stringify({ token: idToken }) })
+      // Redireciona para dashboard
+      window.location.href = 'dashboard.html';
     }
+
+    // Login normal (email/senha) - simulação simples
+    document.getElementById('authForm').addEventListener('submit', (e) => {
+      e.preventDefault();
+
+      const email = document.getElementById('email').value;
+      const password = document.getElementById('password').value;
+
+      // Aqui você colocaria validação real com backend
+      // Por enquanto, simulamos qualquer login válido
+      if (email && password.length >= 4) {
+        const userData = {
+          name: document.getElementById('nome')?.value || email.split('@')[0],
+          email: email,
+          picture: '',
+          loginMethod: 'email',
+          loggedIn: true
+        };
+
+        localStorage.setItem('userData', JSON.stringify(userData));
+        localStorage.setItem('userLoggedIn', 'true');
+
+        window.location.href = 'dashboard.html';
+      } else {
+        alert('Preencha os campos corretamente!');
+      }
+    });
   </script>
 
 </body>
 </html>
-
