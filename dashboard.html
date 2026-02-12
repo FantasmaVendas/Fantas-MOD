@@ -25,10 +25,7 @@
       padding-bottom: 1rem;
       border-bottom: 1px solid #d1d5db;
     }
-    h1 {
-      font-size: 2.2rem;
-      margin: 0;
-    }
+    h1 { font-size: 2.2rem; margin: 0; }
     .btn-logout {
       padding: 0.8rem 1.8rem;
       background: #dc2626;
@@ -75,6 +72,13 @@
     .card-body {
       padding: 1.5rem;
     }
+    .card-body img {
+      width: 100%;
+      height: 180px;
+      object-fit: cover;
+      border-radius: 8px;
+      margin-bottom: 1rem;
+    }
     .card-body p {
       margin: 0 0 1rem 0;
       color: #4b5563;
@@ -89,9 +93,7 @@
       font-weight: 600;
       transition: background 0.2s;
     }
-    .btn-download:hover {
-      background: #1d4ed8;
-    }
+    .btn-download:hover { background: #1d4ed8; }
     footer {
       text-align: center;
       margin-top: 3rem;
@@ -106,68 +108,45 @@
   <div class="container">
 
     <header>
-      <h1>Downloads de Jogos APK</h1>
+      <h1>Meus Jogos APK</h1>
       <button class="btn-logout" id="logoutBtn">Sair</button>
     </header>
 
     <div class="warning">
-      <strong>Aviso importante de segurança:</strong><br>
-      Baixar APKs fora da Google Play pode trazer riscos (vírus, malware, roubo de dados). Use apenas sites confiáveis, verifique com antivírus (ex: VirusTotal) e ative "Fontes desconhecidas" no Android apenas temporariamente. Nunca baixe de links aleatórios ou sites duvidosos.
+      <strong>Aviso de segurança:</strong><br>
+      Esses APKs são hospedados no MediaFire. Baixe apenas se confiar na fonte. Verifique com antivírus (VirusTotal) antes de instalar. Ative "Fontes desconhecidas" no Android só temporariamente.
     </div>
 
     <div class="grid">
 
+      <!-- Power Warriors -->
       <div class="card">
-        <div class="card-header">Uptodown</div>
+        <div class="card-header">Power Warriors 19.7</div>
         <div class="card-body">
-          <p>Um dos mais confiáveis: verifica arquivos com VirusTotal, versões antigas disponíveis e sem anúncios invasivos. Ótimo para jogos.</p>
-          <a href="https://en.uptodown.com/android" target="_blank" class="btn-download">Acessar Uptodown</a>
+          <img src="https://i.imgur.com/INSIRA_O_LINK_DA_IMAGEM_AQUI.png" alt="Power Warriors">
+          <p>Versão 19.7 - Modo história completo + personagens desbloqueados</p>
+          <a href="https://www.mediafire.com/file/hjd4zyv8hrjfrxk/Power+Warriors_19.7.apk/file" target="_blank" class="btn-download">Baixar APK (19.7)</a>
         </div>
       </div>
 
-      <div class="card">
-        <div class="card-header">Aptoide</div>
-        <div class="card-body">
-          <p>Loja alternativa com muitos jogos exclusivos e mods. Tem seção "Editors' Choice" e scans de segurança.</p>
-          <a href="https://pt.aptoide.com/group/games" target="_blank" class="btn-download">Acessar Aptoide Jogos</a>
-        </div>
-      </div>
-
-      <div class="card">
-        <div class="card-header">APKPure</div>
-        <div class="card-body">
-          <p>Rápido e limpo, com verificação de assinatura original. Bom para jogos que saem antes na Play Store.</p>
-          <a href="https://apkpure.com/" target="_blank" class="btn-download">Acessar APKPure</a>
-        </div>
-      </div>
-
-      <div class="card">
-        <div class="card-header">APKMirror</div>
-        <div class="card-body">
-          <p>Focado em APKs originais e assinados pelos desenvolvedores. Muito seguro, sem mods duvidosos.</p>
-          <a href="https://www.apkmirror.com/" target="_blank" class="btn-download">Acessar APKMirror</a>
-        </div>
-      </div>
+      <!-- Você pode adicionar mais jogos aqui no futuro -->
 
     </div>
 
     <footer>
-      Área logada como <strong id="userEmail">carregando...</strong> • Use com responsabilidade • 2026
+      Área logada como <strong id="userEmail">carregando...</strong> • Hospedado por você • 2026
     </footer>
 
   </div>
 
   <script>
-    // Proteção: se não logado → volta pro login
     if (localStorage.getItem('userLoggedIn') !== 'true') {
       window.location.href = 'index.html';
     }
 
-    // Mostra email do usuário logado no rodapé
     const user = JSON.parse(localStorage.getItem('userData') || '{}');
     document.getElementById('userEmail').textContent = user.email || 'Usuário';
 
-    // Logout
     document.getElementById('logoutBtn').addEventListener('click', () => {
       localStorage.removeItem('userData');
       localStorage.removeItem('userLoggedIn');
