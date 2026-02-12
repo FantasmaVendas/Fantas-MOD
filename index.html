@@ -3,15 +3,13 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Login & Cadastro - Clean</title>
+  <title>Login & Cadastro - Clean com Google</title>
+
+  <!-- Google Identity Services (GIS) library -->
+  <script src="https://accounts.google.com/gsi/client" async defer></script>
 
   <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-
+    * { margin:0; padding:0; box-sizing:border-box; }
     body {
       font-family: system-ui, -apple-system, sans-serif;
       min-height: 100vh;
@@ -22,54 +20,22 @@
       padding: 20px;
       color: #111827;
     }
-
     .auth-container {
       background: white;
       width: 100%;
       max-width: 420px;
       padding: 2.5rem 2.2rem;
       border-radius: 16px;
-      box-shadow: 
-        0 10px 25px -5px rgba(0,0,0,0.1),
-        0 10px 10px -5px rgba(0,0,0,0.04);
+      box-shadow: 0 10px 25px -5px rgba(0,0,0,0.1), 0 10px 10px -5px rgba(0,0,0,0.04);
       border: 1px solid #e5e7eb;
       transition: transform 0.2s ease;
     }
-
-    .auth-container:hover {
-      transform: translateY(-4px);
-    }
-
-    .header {
-      text-align: center;
-      margin-bottom: 2rem;
-    }
-
-    .header h1 {
-      font-size: 1.85rem;
-      font-weight: 700;
-      color: #111827;
-      margin-bottom: 0.35rem;
-    }
-
-    .header p {
-      color: #6b7280;
-      font-size: 0.95rem;
-    }
-
-    .form-group {
-      margin-bottom: 1.5rem;
-      position: relative;
-    }
-
-    label {
-      display: block;
-      margin-bottom: 0.5rem;
-      font-size: 0.9rem;
-      font-weight: 500;
-      color: #374151;
-    }
-
+    .auth-container:hover { transform: translateY(-4px); }
+    .header { text-align: center; margin-bottom: 2rem; }
+    .header h1 { font-size: 1.85rem; font-weight: 700; color: #111827; margin-bottom: 0.35rem; }
+    .header p { color: #6b7280; font-size: 0.95rem; }
+    .form-group { margin-bottom: 1.5rem; position: relative; }
+    label { display: block; margin-bottom: 0.5rem; font-size: 0.9rem; font-weight: 500; color: #374151; }
     input {
       width: 100%;
       padding: 0.9rem 1rem;
@@ -79,22 +45,14 @@
       background: #f9fafb;
       transition: all 0.2s ease;
     }
-
     input:focus {
       outline: none;
       border-color: #6b7280;
-      box-shadow: 0 0 0 3px rgba(107, 114, 128, 0.15);
+      box-shadow: 0 0 0 3px rgba(107,114,128,0.15);
       background: white;
     }
-
-    .password-wrapper {
-      position: relative;
-    }
-
-    .password-wrapper input {
-      padding-right: 3.2rem;
-    }
-
+    .password-wrapper { position: relative; }
+    .password-wrapper input { padding-right: 3.2rem; }
     .toggle-password {
       position: absolute;
       right: 0.9rem;
@@ -105,57 +63,17 @@
       width: 32px;
       height: 32px;
       cursor: pointer;
-      padding: 0;
       display: flex;
       align-items: center;
       justify-content: center;
     }
-
-    .toggle-password img {
-      width: 20px;
-      height: 20px;
-      opacity: 0.7;
-      transition: opacity 0.2s;
-    }
-
-    .toggle-password:hover img {
-      opacity: 1;
-    }
-
-    .options {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin: 1.2rem 0 1.6rem;
-      font-size: 0.9rem;
-    }
-
-    .remember {
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-      color: #4b5563;
-    }
-
-    .remember input[type="checkbox"] {
-      width: 16px;
-      height: 16px;
-      accent-color: #374151;
-    }
-
-    .forgot a,
-    .toggle-link a {
-      color: #374151;
-      text-decoration: none;
-      font-weight: 500;
-    }
-
-    .forgot a:hover,
-    .toggle-link a:hover {
-      text-decoration: underline;
-      color: #111827;
-    }
-
+    .toggle-password img { width: 20px; height: 20px; opacity: 0.7; transition: opacity 0.2s; }
+    .toggle-password:hover img { opacity: 1; }
+    .options { display: flex; justify-content: space-between; align-items: center; margin: 1.2rem 0 1.6rem; font-size: 0.9rem; }
+    .remember { display: flex; align-items: center; gap: 0.5rem; color: #4b5563; }
+    .remember input[type="checkbox"] { width: 16px; height: 16px; accent-color: #374151; }
+    .forgot a, .toggle-link a { color: #374151; text-decoration: none; font-weight: 500; }
+    .forgot a:hover, .toggle-link a:hover { text-decoration: underline; color: #111827; }
     .btn-primary {
       width: 100%;
       padding: 0.95rem;
@@ -167,47 +85,39 @@
       font-weight: 600;
       cursor: pointer;
       transition: all 0.25s ease;
+      margin-bottom: 1rem;
     }
-
     .btn-primary:hover {
       background: #1f2937;
       transform: translateY(-1.5px);
       box-shadow: 0 8px 16px rgba(0,0,0,0.12);
     }
-
-    .btn-primary:active {
-      transform: translateY(0);
+    .btn-google {
+      width: 100%;
+      padding: 0.95rem;
+      background: #ffffff;
+      color: #111827;
+      border: 1px solid #d1d5db;
+      border-radius: 8px;
+      font-size: 1rem;
+      font-weight: 500;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.8rem;
+      transition: all 0.25s ease;
     }
-
-    .toggle-link {
-      text-align: center;
-      margin-top: 1.6rem;
-      color: #6b7280;
-      font-size: 0.95rem;
+    .btn-google:hover {
+      background: #f8f9fa;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
     }
-
-    /* Modo cadastro - campos extras escondidos por padrão */
-    .cadastro-only {
-      display: none;
-    }
-
-    .is-cadastro .cadastro-only {
-      display: block;
-    }
-
-    .is-cadastro .login-only {
-      display: none;
-    }
-
-    .is-cadastro .header h1 {
-      content: "Criar conta";
-    }
-
-    @media (max-width: 480px) {
-      .auth-container {
-        padding: 2rem 1.4rem;
-      }
-    }
+    .btn-google img { width: 20px; height: 20px; }
+    .toggle-link { text-align: center; margin-top: 1.6rem; color: #6b7280; font-size: 0.95rem; }
+    .google-callback { margin-top: 1rem; text-align: center; font-size: 0.9rem; color: #4b5563; }
+    .cadastro-only { display: none; }
+    .is-cadastro .cadastro-only { display: block; }
+    .is-cadastro .login-only { display: none; }
   </style>
 </head>
 <body>
@@ -216,7 +126,7 @@
 
     <div class="header">
       <h1 id="formTitle">Entrar</h1>
-      <p id="formSubtitle">Digite suas credenciais para acessar</p>
+      <p id="formSubtitle">Digite suas credenciais ou use o Google</p>
     </div>
 
     <form id="authForm">
@@ -263,6 +173,12 @@
 
       <button type="submit" class="btn-primary" id="submitBtn">Entrar</button>
 
+      <!-- Botão Google -->
+      <button type="button" class="btn-google" id="googleBtn">
+        <img src="https://www.google.com/favicon.ico" alt="Google"> <!-- ou use uma imagem melhor de Google G -->
+        Entrar com Google
+      </button>
+
     </form>
 
     <div class="toggle-link">
@@ -270,46 +186,45 @@
       <a href="#" id="toggleMode">Criar conta</a>
     </div>
 
+    <div class="google-callback" id="googleCallbackInfo"></div>
+
   </div>
 
   <script>
+    // Toggle modo login/cadastro
     const toggleMode = document.getElementById('toggleMode');
     const authBox = document.getElementById('authBox');
     const formTitle = document.getElementById('formTitle');
     const formSubtitle = document.getElementById('formSubtitle');
     const submitBtn = document.getElementById('submitBtn');
     const toggleText = document.getElementById('toggleText');
-    const loginOptions = document.getElementById('loginOptions');
-
     let isCadastro = false;
 
     toggleMode.addEventListener('click', (e) => {
       e.preventDefault();
       isCadastro = !isCadastro;
-      
       if (isCadastro) {
         authBox.classList.add('is-cadastro');
         formTitle.textContent = 'Criar conta';
-        formSubtitle.textContent = 'Preencha os dados para se cadastrar';
+        formSubtitle.textContent = 'Preencha os dados ou use o Google';
         submitBtn.textContent = 'Criar conta';
         toggleText.textContent = 'Já possui conta?';
         toggleMode.textContent = 'Fazer login';
       } else {
         authBox.classList.remove('is-cadastro');
         formTitle.textContent = 'Entrar';
-        formSubtitle.textContent = 'Digite suas credenciais para acessar';
+        formSubtitle.textContent = 'Digite suas credenciais ou use o Google';
         submitBtn.textContent = 'Entrar';
         toggleText.textContent = 'Ainda não tem conta?';
         toggleMode.textContent = 'Criar conta';
       }
     });
 
-    // Toggle senha
+    // Toggle de senha (eye / eye-slash)
     function createToggleHandler(inputId, iconId) {
       return function() {
         const input = document.getElementById(inputId);
         const icon = document.getElementById(iconId);
-        
         if (input.type === 'password') {
           input.type = 'text';
           icon.src = 'eye-slash.png';
@@ -321,9 +236,46 @@
         }
       };
     }
-
     document.getElementById('togglePass').addEventListener('click', createToggleHandler('password', 'eyeIcon'));
     document.getElementById('togglePassConfirm').addEventListener('click', createToggleHandler('passwordConfirm', 'eyeIconConfirm'));
+
+    // ====================== Google Sign-In ======================
+    const CLIENT_ID = '455017979288-segvpalrj7te0k0ue22pek5ku114gt4c.apps.googleusercontent.com';
+
+    window.onload = function () {
+      google.accounts.id.initialize({
+        client_id: CLIENT_ID,
+        callback: handleGoogleCredentialResponse,
+        auto_select: false, // ou true para One Tap se quiser
+        cancel_on_tap_outside: true
+      });
+
+      // Renderiza o botão personalizado (em vez do botão padrão do Google)
+      document.getElementById('googleBtn').addEventListener('click', () => {
+        google.accounts.id.prompt(); // Abre o popup/select do Google
+      });
+    };
+
+    function handleGoogleCredentialResponse(response) {
+      // response.credential é o ID Token JWT
+      const idToken = response.credential;
+
+      // Decodifica o JWT para ver os dados (apenas para debug/teste)
+      const payload = JSON.parse(atob(idToken.split('.')[1]));
+      console.log('Usuário logado via Google:', payload);
+
+      // Mostra info na tela (exemplo)
+      document.getElementById('googleCallbackInfo').innerHTML = `
+        <strong>Logado com Google!</strong><br>
+        Nome: ${payload.name || 'N/A'}<br>
+        Email: ${payload.email}<br>
+        Picture: <img src="${payload.picture}" width="40" style="border-radius:50%;">
+      `;
+
+      // Aqui você envia o idToken para o seu backend (via fetch POST) para validar e criar sessão
+      // Exemplo:
+      // fetch('/api/auth/google', { method: 'POST', body: JSON.stringify({ token: idToken }) })
+    }
   </script>
 
 </body>
