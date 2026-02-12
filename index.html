@@ -5,10 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Login & Cadastro</title>
 
-  <!-- Google Identity Services -->
   <script src="https://accounts.google.com/gsi/client" async defer></script>
-
-  <!-- Font Awesome para ícones de olho (eye / eye-slash) -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 
   <style>
@@ -173,7 +170,6 @@
         </div>
       </div>
 
-      <!-- Botão Continuar com email salvo (mesmo tamanho/estilo do Google) -->
       <div class="google-button-wrapper" id="savedEmailWrapper" style="display: none;">
         <button type="button" class="btn btn-google" id="savedEmailBtn">
           <i class="fas fa-user-circle" style="font-size: 24px; color: #6b7280;"></i>
@@ -191,12 +187,10 @@
   </div>
 
   <script>
-    // Se já logado → redireciona
     if (localStorage.getItem('userLoggedIn') === 'true') {
       window.location.href = 'dashboard.html';
     }
 
-    // Toggle modo cadastro
     let isCadastro = false;
     const toggleMode = document.getElementById('toggleMode');
     const authContainer = document.getElementById('authContainer');
@@ -228,7 +222,6 @@
       }
     });
 
-    // Toggle mostrar/ocultar senha (com Font Awesome)
     function createToggleHandler(inputId, iconId) {
       return function() {
         const input = document.getElementById(inputId);
@@ -247,7 +240,6 @@
     document.getElementById('togglePass').addEventListener('click', createToggleHandler('password', 'eyeIcon'));
     document.getElementById('togglePassConfirm').addEventListener('click', createToggleHandler('passwordConfirm', 'eyeIconConfirm'));
 
-    // Botão email salvo
     const savedEmailWrapper = document.getElementById('savedEmailWrapper');
     const savedEmailBtn = document.getElementById('savedEmailBtn');
     const savedEmailShort = document.getElementById('savedEmailShort');
@@ -264,7 +256,6 @@
       window.location.href = 'dashboard.html';
     });
 
-    // Google Login
     function handleGoogleLogin(response) {
       const payload = JSON.parse(atob(response.credential.split('.')[1]));
       const user = {
@@ -279,7 +270,6 @@
       window.location.href = 'dashboard.html';
     }
 
-    // Login email/senha simulado
     document.getElementById('authForm').addEventListener('submit', (e) => {
       e.preventDefault();
       const email = document.getElementById('email').value;
