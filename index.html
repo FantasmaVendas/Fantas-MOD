@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Login & Cadastro - Clean com Google</title>
 
-  <!-- Google Identity Services (GIS) library -->
+  <!-- Google Identity Services -->
   <script src="https://accounts.google.com/gsi/client" async defer></script>
 
   <style>
@@ -112,7 +112,7 @@
       background: #f8f9fa;
       box-shadow: 0 4px 12px rgba(0,0,0,0.08);
     }
-    .btn-google img { width: 20px; height: 20px; }
+    .btn-google img { width: 24px; height: 24px; } /* Aumentei um pouco para ficar bonito */
     .toggle-link { text-align: center; margin-top: 1.6rem; color: #6b7280; font-size: 0.95rem; }
     .google-callback { margin-top: 1rem; text-align: center; font-size: 0.9rem; color: #4b5563; }
     .cadastro-only { display: none; }
@@ -173,9 +173,9 @@
 
       <button type="submit" class="btn-primary" id="submitBtn">Entrar</button>
 
-      <!-- Botão Google -->
+      <!-- Botão Google - sempre visível -->
       <button type="button" class="btn-google" id="googleBtn">
-        <img src="https://www.google.com/favicon.ico" alt="Google"> <!-- ou use uma imagem melhor de Google G -->
+        <img src="https://developers.google.com/identity/images/g-logo.png" alt="Google">
         Entrar com Google
       </button>
 
@@ -206,7 +206,7 @@
       if (isCadastro) {
         authBox.classList.add('is-cadastro');
         formTitle.textContent = 'Criar conta';
-        formSubtitle.textContent = 'Preencha os dados ou use o Google';
+        formSubtitle.textContent = 'Preencha os dados ou crie com Google';
         submitBtn.textContent = 'Criar conta';
         toggleText.textContent = 'Já possui conta?';
         toggleMode.textContent = 'Fazer login';
@@ -220,7 +220,7 @@
       }
     });
 
-    // Toggle de senha (eye / eye-slash)
+    // Toggle eye password
     function createToggleHandler(inputId, iconId) {
       return function() {
         const input = document.getElementById(inputId);
@@ -239,42 +239,40 @@
     document.getElementById('togglePass').addEventListener('click', createToggleHandler('password', 'eyeIcon'));
     document.getElementById('togglePassConfirm').addEventListener('click', createToggleHandler('passwordConfirm', 'eyeIconConfirm'));
 
-    // ====================== Google Sign-In ======================
+    // Google Sign-In
     const CLIENT_ID = '455017979288-segvpalrj7te0k0ue22pek5ku114gt4c.apps.googleusercontent.com';
 
     window.onload = function () {
       google.accounts.id.initialize({
         client_id: CLIENT_ID,
-        callback: handleGoogleCredentialResponse,
-        auto_select: false, // ou true para One Tap se quiser
-        cancel_on_tap_outside: true
+        callback: handleGoogleCredentialResponse
       });
 
-      // Renderiza o botão personalizado (em vez do botão padrão do Google)
       document.getElementById('googleBtn').addEventListener('click', () => {
-        google.accounts.id.prompt(); // Abre o popup/select do Google
+        google.accounts.id.prompt(); // Abre o popup do Google
       });
     };
 
     function handleGoogleCredentialResponse(response) {
-      // response.credential é o ID Token JWT
       const idToken = response.credential;
-
-      // Decodifica o JWT para ver os dados (apenas para debug/teste)
       const payload = JSON.parse(atob(idToken.split('.')[1]));
-      console.log('Usuário logado via Google:', payload);
+      console.log('Google login:', payload);
 
-      // Mostra info na tela (exemplo)
+      // Mostra na tela (exemplo)
       document.getElementById('googleCallbackInfo').innerHTML = `
         <strong>Logado com Google!</strong><br>
         Nome: ${payload.name || 'N/A'}<br>
         Email: ${payload.email}<br>
-        Picture: <img src="${payload.picture}" width="40" style="border-radius:50%;">
+        <img src="${payload.picture}" width="60" style="border-radius:50%; margin-top:8px;">
       `;
 
-      // Aqui você envia o idToken para o seu backend (via fetch POST) para validar e criar sessão
-      // Exemplo:
-      // fetch('/api/auth/google', { method: 'POST', body: JSON.stringify({ token: idToken }) })
+      // Se for modo cadastro, você pode preencher o campo nome/email automaticamente aqui
+      if (isCadastro) {
+        document.getElementById('nome').value = payload.name || '';
+        document.getElementById('email').value = payload.email || '';
+      }
+
+      // Envie idToken para seu backend aqui!
     }
   </script>
 
