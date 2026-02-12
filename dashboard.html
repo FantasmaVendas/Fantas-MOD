@@ -32,10 +32,11 @@
       object-fit: cover;
       border: 4px solid #e5e7eb;
     }
-    h1 { font-size: 2rem; margin-bottom: 0.5rem; }
-    p { color: #4b5563; margin-bottom: 2rem; font-size: 1.1rem; }
+    h1 { font-size: 2.2rem; margin-bottom: 0.5rem; }
+    .welcome { color: #4b5563; margin-bottom: 2rem; font-size: 1.1rem; }
+    .info { margin: 1rem 0; font-size: 1.05rem; }
     .btn-logout {
-      padding: 1rem 2rem;
+      padding: 1rem 2.5rem;
       background: #dc2626;
       color: white;
       border: none;
@@ -43,6 +44,7 @@
       font-size: 1.1rem;
       font-weight: 600;
       cursor: pointer;
+      margin-top: 2rem;
       transition: background 0.2s;
     }
     .btn-logout:hover { background: #b91c1c; }
@@ -50,42 +52,36 @@
 </head>
 <body>
 
-  <div class="dashboard" id="dashboardContent">
-    <h1>Bem-vindo!</h1>
-    <p>Você está logado com sucesso.</p>
+  <div class="dashboard">
+    <h1>Bem-vindo de volta!</h1>
+    <p class="welcome">Você está logado com sucesso.</p>
 
-    <img id="userPicture" class="avatar" src="" alt="Foto do usuário">
-    <h2 id="userName">Carregando...</h2>
-    <p id="userEmail">Carregando...</p>
+    <img id="userPicture" class="avatar" src="" alt="Sua foto" style="display:none;">
+    <div class="info"><strong>Nome:</strong> <span id="userName">Carregando...</span></div>
+    <div class="info"><strong>Email:</strong> <span id="userEmail">Carregando...</span></div>
+    <div class="info"><strong>Login via:</strong> <span id="loginMethod">—</span></div>
 
-    <p>Login via: <strong id="loginMethod">—</strong></p>
-
-    <button class="btn-logout" id="logoutBtn">Sair</button>
+    <button class="btn-logout" id="logoutBtn">Sair da conta</button>
   </div>
 
   <script>
-    // Verifica se está logado
     if (localStorage.getItem('userLoggedIn') !== 'true') {
       window.location.href = 'index.html';
     }
 
-    // Carrega dados do usuário
-    const userData = JSON.parse(localStorage.getItem('userData') || '{}');
+    const user = JSON.parse(localStorage.getItem('userData') || '{}');
 
-    document.getElementById('userName').textContent = userData.name || 'Usuário';
-    document.getElementById('userEmail').textContent = userData.email || '—';
+    document.getElementById('userName').textContent = user.name || 'Usuário';
+    document.getElementById('userEmail').textContent = user.email || '—';
     document.getElementById('loginMethod').textContent = 
-      userData.loginMethod === 'google' ? 'Google' : 'E-mail e senha';
+      user.loginMethod === 'google' ? 'Google' : 'E-mail e senha';
 
-    const pictureEl = document.getElementById('userPicture');
-    if (userData.picture) {
-      pictureEl.src = userData.picture;
-      pictureEl.style.display = 'block';
-    } else {
-      pictureEl.style.display = 'none';
+    const pic = document.getElementById('userPicture');
+    if (user.picture) {
+      pic.src = user.picture;
+      pic.style.display = 'block';
     }
 
-    // Botão sair
     document.getElementById('logoutBtn').addEventListener('click', () => {
       localStorage.removeItem('userData');
       localStorage.removeItem('userLoggedIn');
