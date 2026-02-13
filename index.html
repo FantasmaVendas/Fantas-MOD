@@ -27,21 +27,21 @@
     .container {
       background: white;
       width: 100%;
-      max-width: 420px;
-      padding: 2.5rem 2rem;
+      max-width: 460px;          /* ← Aumentado de 420px para 460px */
+      padding: 2.8rem 2.2rem;    /* um pouquinho mais de padding também */
       border-radius: 16px;
       box-shadow: 0 10px 25px rgba(0,0,0,0.1);
       border: 1px solid #e5e7eb;
     }
-    .header { text-align: center; margin-bottom: 2rem; }
+    .header { text-align: center; margin-bottom: 2.2rem; }
     .header h1 { font-size: 1.9rem; font-weight: 700; margin-bottom: 0.4rem; }
     .header p { color: #6b7280; font-size: 0.95rem; }
 
-    .form-group { margin-bottom: 1.5rem; }
+    .form-group { margin-bottom: 1.6rem; }
     label { display: block; margin-bottom: 0.5rem; font-size: 0.9rem; font-weight: 500; color: #374151; }
     input {
       width: 100%;
-      padding: 0.9rem 1rem;
+      padding: 0.95rem 1rem;
       border: 1px solid #d1d5db;
       border-radius: 8px;
       font-size: 1rem;
@@ -78,16 +78,24 @@
       font-weight: 600;
       cursor: pointer;
       transition: all 0.2s;
-      margin: 0.6rem 0;
+      margin: 0.7rem 0;
       display: flex;
       align-items: center;
       justify-content: center;
       gap: 10px;
     }
-    .btn-primary { background: #111827; color: white; }
-    .btn-primary:hover { background: #1f2937; }
-    .btn-visitor { background: #10b981; color: white; }
-    .btn-admin { background: #ef4444; color: white; }
+    .btn-primary,
+    .btn-visitor,
+    .btn-admin {
+      background: #111827;     /* Todos os 3 botões agora na mesma cor preta */
+      color: white;
+    }
+    .btn-primary:hover,
+    .btn-visitor:hover,
+    .btn-admin:hover {
+      background: #1f2937;
+    }
+
     .btn-google {
       background: white;
       border: 1px solid #d1d5db;
@@ -96,7 +104,7 @@
     }
     .btn-google:hover { background: #f8f9fa; }
 
-    .toggle-link { text-align: center; margin-top: 1.2rem; font-size: 0.95rem; color: #6b7280; }
+    .toggle-link { text-align: center; margin-top: 1.4rem; font-size: 0.95rem; color: #6b7280; }
     .toggle-link a { color: #374151; font-weight: 500; text-decoration: none; }
     .cadastro-only { display: none; }
     .is-cadastro .cadastro-only { display: block; }
@@ -175,11 +183,11 @@
     </button>
 
     <button class="btn btn-visitor" onclick="enterAsVisitor()">
-      👤 Entrar como Visitante
+      <img src="visitors.png" alt="Visitante" style="width:20px; height:20px;"> Entrar como Visitante
     </button>
 
     <button class="btn btn-admin" onclick="enterAsAdmin()">
-      🔑 Entrar como Administrador (token)
+      <img src="keyadm.png" alt="Admin" style="width:20px; height:20px;"> Entrar como Administrador
     </button>
 
     <div class="toggle-link">
@@ -191,9 +199,7 @@
 
   <script>
     let isCadastro = false;
-    let currentEmail = '';
 
-    // Toggle cadastro / login
     document.getElementById('toggleMode').addEventListener('click', (e) => {
       e.preventDefault();
       isCadastro = !isCadastro;
@@ -204,7 +210,6 @@
       document.getElementById('toggleMode').textContent = isCadastro ? 'Fazer login' : 'Criar conta';
     });
 
-    // Mostrar / esconder senha
     function togglePassword(inputId, iconId) {
       const input = document.getElementById(inputId);
       const icon = document.getElementById(iconId);
@@ -219,19 +224,17 @@
     document.getElementById('togglePass').addEventListener('click', () => togglePassword('password', 'eyeIcon'));
     document.getElementById('togglePassConfirm').addEventListener('click', () => togglePassword('passwordConfirm', 'eyeIconConfirm'));
 
-    // Função auxiliar para mostrar alertas
     function showAlert(message, type = 'error') {
       const alertBox = document.getElementById('alertBox');
       alertBox.innerHTML = `<div class="alert alert-${type}">${message}</div>`;
       setTimeout(() => alertBox.innerHTML = '', 5000);
     }
 
-    // Entrar como Visitante
     function enterAsVisitor() {
       const user = {
         name: "Visitante",
         email: "visitante@temp",
-        picture: "vistion.png",
+        picture: "visitors.png",          // ← atualizado
         loginMethod: "visitor",
         loggedIn: true,
         isVisitor: true
@@ -241,7 +244,6 @@
       window.location.href = 'dashboard.html';
     }
 
-    // Entrar como Admin com token
     function enterAsAdmin() {
       const token = prompt("Digite o token de administrador:");
       if (!token) return;
@@ -277,7 +279,6 @@
       }
     }
 
-    // Login Google
     function handleGoogleLogin(response) {
       try {
         const payload = JSON.parse(atob(response.credential.split('.')[1]));
@@ -296,7 +297,6 @@
       }
     }
 
-    // Login / Cadastro com email (simulado - sem backend real)
     document.getElementById('authForm').addEventListener('submit', (e) => {
       e.preventDefault();
 
@@ -325,7 +325,6 @@
           return;
         }
 
-        // Simula criação de conta
         const user = {
           name: nome,
           email,
@@ -338,7 +337,6 @@
         showAlert('Conta criada com sucesso!', 'success');
         setTimeout(() => window.location.href = 'dashboard.html', 1200);
       } else {
-        // Simula login
         const user = {
           name: email.split('@')[0],
           email,
@@ -352,7 +350,6 @@
       }
     });
 
-    // Redireciona se já estiver logado
     if (localStorage.getItem('userLoggedIn') === 'true') {
       window.location.href = 'dashboard.html';
     }
