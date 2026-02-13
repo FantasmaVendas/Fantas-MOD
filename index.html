@@ -27,67 +27,76 @@
     .container {
       background: white;
       width: 100%;
-      max-width: 460px;          /* ← Aumentado de 420px para 460px */
-      padding: 2.8rem 2.2rem;    /* um pouquinho mais de padding também */
-      border-radius: 16px;
-      box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+      max-width: 500px;               /* ← Aumentado para 500px (era 460px) */
+      padding: 3rem 2.5rem;           /* mais espaço interno também */
+      border-radius: 20px;
+      box-shadow: 0 12px 30px rgba(0,0,0,0.12);
       border: 1px solid #e5e7eb;
     }
-    .header { text-align: center; margin-bottom: 2.2rem; }
-    .header h1 { font-size: 1.9rem; font-weight: 700; margin-bottom: 0.4rem; }
-    .header p { color: #6b7280; font-size: 0.95rem; }
+    .header { text-align: center; margin-bottom: 2.4rem; }
+    .header h1 { font-size: 2.1rem; font-weight: 700; margin-bottom: 0.5rem; }
+    .header p { color: #6b7280; font-size: 1rem; }
 
-    .form-group { margin-bottom: 1.6rem; }
-    label { display: block; margin-bottom: 0.5rem; font-size: 0.9rem; font-weight: 500; color: #374151; }
+    .form-group { margin-bottom: 1.8rem; }
+    label { display: block; margin-bottom: 0.6rem; font-size: 0.95rem; font-weight: 500; color: #374151; }
     input {
       width: 100%;
-      padding: 0.95rem 1rem;
+      padding: 1rem 1.1rem;
       border: 1px solid #d1d5db;
-      border-radius: 8px;
-      font-size: 1rem;
+      border-radius: 10px;
+      font-size: 1.05rem;
       background: #f9fafb;
     }
     input:focus {
       outline: none;
       border-color: #6b7280;
-      box-shadow: 0 0 0 3px rgba(107,114,128,0.15);
+      box-shadow: 0 0 0 4px rgba(107,114,128,0.12);
       background: white;
     }
 
-    .password-wrapper { position: relative; }
-    .password-wrapper input { padding-right: 3.5rem; }
+    .password-wrapper {
+      position: relative;
+    }
+    .password-wrapper input {
+      padding-right: 4.2rem;
+    }
     .toggle-password {
       position: absolute;
-      right: 1rem;
+      right: 1.2rem;
       top: 50%;
       transform: translateY(-50%);
       background: none;
       border: none;
       cursor: pointer;
-      font-size: 1.3rem;
-      color: #6b7280;
+      width: 28px;
+      height: 28px;
+      padding: 0;
     }
-    .toggle-password:hover { color: #111827; }
+    .toggle-password img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+    }
 
     .btn {
       width: 100%;
-      padding: 0.95rem;
+      padding: 1rem;
       border: none;
-      border-radius: 8px;
-      font-size: 1rem;
+      border-radius: 10px;
+      font-size: 1.05rem;
       font-weight: 600;
       cursor: pointer;
       transition: all 0.2s;
-      margin: 0.7rem 0;
+      margin: 0.8rem 0;
       display: flex;
       align-items: center;
       justify-content: center;
-      gap: 10px;
+      gap: 12px;
     }
     .btn-primary,
     .btn-visitor,
     .btn-admin {
-      background: #111827;     /* Todos os 3 botões agora na mesma cor preta */
+      background: #111827;
       color: white;
     }
     .btn-primary:hover,
@@ -104,16 +113,16 @@
     }
     .btn-google:hover { background: #f8f9fa; }
 
-    .toggle-link { text-align: center; margin-top: 1.4rem; font-size: 0.95rem; color: #6b7280; }
+    .toggle-link { text-align: center; margin-top: 1.6rem; font-size: 1rem; color: #6b7280; }
     .toggle-link a { color: #374151; font-weight: 500; text-decoration: none; }
     .cadastro-only { display: none; }
     .is-cadastro .cadastro-only { display: block; }
 
     .alert {
-      padding: 0.8rem;
-      border-radius: 8px;
-      margin-bottom: 1rem;
-      font-size: 0.9rem;
+      padding: 1rem;
+      border-radius: 10px;
+      margin-bottom: 1.2rem;
+      font-size: 0.95rem;
     }
     .alert-success { background: #d1fae5; color: #065f46; border: 1px solid #6ee7b7; }
     .alert-error   { background: #fee2e2;   color: #991b1b; border: 1px solid #fca5a5; }
@@ -147,7 +156,7 @@
         <div class="password-wrapper">
           <input type="password" id="password" placeholder="••••••••" required autocomplete="current-password">
           <button type="button" class="toggle-password" id="togglePass">
-            <i class="fas fa-eye" id="eyeIcon"></i>
+            <img src="eye.png" alt="Mostrar senha" id="eyeIcon">
           </button>
         </div>
       </div>
@@ -157,7 +166,7 @@
         <div class="password-wrapper">
           <input type="password" id="passwordConfirm" placeholder="••••••••" autocomplete="new-password">
           <button type="button" class="toggle-password" id="togglePassConfirm">
-            <i class="fas fa-eye" id="eyeIconConfirm"></i>
+            <img src="eye.png" alt="Mostrar senha" id="eyeIconConfirm">
           </button>
         </div>
       </div>
@@ -183,11 +192,11 @@
     </button>
 
     <button class="btn btn-visitor" onclick="enterAsVisitor()">
-      <img src="visitors.png" alt="Visitante" style="width:20px; height:20px;"> Entrar como Visitante
+      <img src="visitors.png" alt="Visitante" style="width:22px; height:22px;"> Entrar como Visitante
     </button>
 
     <button class="btn btn-admin" onclick="enterAsAdmin()">
-      <img src="keyadm.png" alt="Admin" style="width:20px; height:20px;"> Entrar como Administrador
+      <img src="keyadm.png" alt="Admin" style="width:22px; height:22px;"> Entrar como Administrador
     </button>
 
     <div class="toggle-link">
@@ -210,17 +219,21 @@
       document.getElementById('toggleMode').textContent = isCadastro ? 'Fazer login' : 'Criar conta';
     });
 
+    // Mostrar / esconder senha com imagens
     function togglePassword(inputId, iconId) {
       const input = document.getElementById(inputId);
       const icon = document.getElementById(iconId);
       if (input.type === 'password') {
         input.type = 'text';
-        icon.classList.replace('fa-eye', 'fa-eye-slash');
+        icon.src = 'eye-slash.png';
+        icon.alt = 'Ocultar senha';
       } else {
         input.type = 'password';
-        icon.classList.replace('fa-eye-slash', 'fa-eye');
+        icon.src = 'eye.png';
+        icon.alt = 'Mostrar senha';
       }
     }
+
     document.getElementById('togglePass').addEventListener('click', () => togglePassword('password', 'eyeIcon'));
     document.getElementById('togglePassConfirm').addEventListener('click', () => togglePassword('passwordConfirm', 'eyeIconConfirm'));
 
@@ -234,7 +247,7 @@
       const user = {
         name: "Visitante",
         email: "visitante@temp",
-        picture: "visitors.png",          // ← atualizado
+        picture: "visitors.png",
         loginMethod: "visitor",
         loggedIn: true,
         isVisitor: true
