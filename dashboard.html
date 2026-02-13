@@ -4,6 +4,9 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Downloads de Jogos APK</title>
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+
   <style>
     body {
       font-family: system-ui, sans-serif;
@@ -24,19 +27,88 @@
       margin-bottom: 2.5rem;
       padding-bottom: 1rem;
       border-bottom: 1px solid #d1d5db;
+      position: relative;
     }
     h1 { font-size: 2.2rem; margin: 0; }
-    .btn-logout {
-      padding: 0.8rem 1.8rem;
-      background: #dc2626;
-      color: white;
-      border: none;
-      border-radius: 8px;
-      font-weight: 600;
-      cursor: pointer;
-      transition: background 0.2s;
+
+    /* Área do usuário / menu */
+    .user-area {
+      position: relative;
     }
-    .btn-logout:hover { background: #b91c1c; }
+    .profile-wrapper {
+      position: relative;
+      width: 48px;
+      height: 48px;
+      cursor: pointer;
+    }
+    .profile-circle {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: url('images/circle.png') no-repeat center center;
+      background-size: contain;
+      border: 3px solid #00f0ff; /* borda ciano */
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 2;
+      box-sizing: border-box;
+    }
+    .user-profile {
+      width: 70%;
+      height: 70%;
+      margin: 15%;
+      border-radius: 50%;
+      object-fit: cover;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+      position: relative;
+      z-index: 1;
+    }
+    .user-menu {
+      display: none;
+      position: absolute;
+      top: 60px;
+      right: 0;
+      background: url('images/BackgroundMenu.png') no-repeat center center;
+      background-size: cover;
+      border-radius: 12px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.18);
+      min-width: 180px;
+      z-index: 100;
+      overflow: hidden;
+      border: 1px solid #e5e7eb;
+    }
+    .user-menu.active {
+      display: block;
+    }
+    .menu-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 16px;
+      color: #111827;
+      text-decoration: none;
+      font-weight: 500;
+      transition: background 0.2s;
+      background: rgba(255, 255, 255, 0.7);
+    }
+    .menu-item:hover {
+      background: rgba(243, 244, 246, 0.9);
+    }
+    .menu-item img {
+      width: 24px;
+      height: 24px;
+      object-fit: contain;
+    }
+    .menu-item.logout {
+      color: #dc2626;
+      border-top: 1px solid #e5e7eb;
+    }
+    .menu-item.logout:hover {
+      background: rgba(254, 226, 226, 0.9);
+    }
+
     .warning {
       background: #fef3c7;
       border-left: 5px solid #d97706;
@@ -46,6 +118,7 @@
       color: #92400e;
     }
     .warning strong { color: #b45309; }
+
     .grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
@@ -59,14 +132,14 @@
       overflow: hidden;
       transition: transform 0.2s, box-shadow 0.2s;
       text-align: center;
-      min-height: 380px; /* ajustado para caber bem o conteúdo */
+      min-height: 380px;
     }
     .card:hover {
       transform: translateY(-6px);
       box-shadow: 0 10px 20px rgba(0,0,0,0.18);
     }
     .card-header {
-      background: rgba(0, 0, 0, 0.60); /* fundo escuro semi-transparente */
+      background: rgba(0, 0, 0, 0.60);
       padding: 1.2rem;
       font-size: 1.35rem;
       font-weight: 700;
@@ -74,7 +147,7 @@
       text-shadow: 0 1px 3px rgba(0,0,0,0.6);
     }
     .card-body {
-      background: rgba(255, 255, 255, 0.92); /* branco quase opaco para legibilidade */
+      background: rgba(255, 255, 255, 0.92);
       padding: 1.6rem 1.4rem;
       border-radius: 0 0 12px 12px;
     }
@@ -123,7 +196,33 @@
 
     <header>
       <h1>Meus Jogos APK</h1>
-      <button class="btn-logout" id="logoutBtn">Sair</button>
+
+      <div class="user-area">
+        <div class="profile-wrapper">
+          <img 
+            id="userAvatar" 
+            src="images/user.png" 
+            alt="Perfil do usuário" 
+            class="user-profile"
+            onerror="this.src='https://www.clipartmax.com/png/middle/296-2969961_no-image-user-profile-icon.png';"
+          >
+          <div class="profile-circle"></div>
+        </div>
+        <div class="user-menu" id="userMenu">
+          <a href="dashboard.html" class="menu-item">
+            <img src="images/home.png" alt="Home">
+            Home
+          </a>
+          <a href="suporte.html" class="menu-item">
+            <img src="images/support.png" alt="Suporte">
+            Suporte
+          </a>
+          <a href="#" id="logoutMenu" class="menu-item logout">
+            <img src="images/exit.png" alt="Sair">
+            Sair
+          </a>
+        </div>
+      </div>
     </header>
 
     <div class="warning">
@@ -132,7 +231,6 @@
     </div>
 
     <div class="grid">
-
       <!-- Power Warriors -->
       <div class="card">
         <div class="card-header">Power Warriors</div>
@@ -162,9 +260,17 @@
           <a href="https://www.mediafire.com/file/cohv3tohfsgm2zx/SubwaySuf.apk/file" target="_blank" class="btn-download">Baixar APK</a>
         </div>
       </div>
+    </div>
 
-      <!-- Pode adicionar mais cards aqui no futuro -->
-
+    <!-- Shadown Fight -->
+      <div class="card">
+        <div class="card-header">Shadown Fight 2</div>
+        <div class="card-body">
+          <img src="ShadowFight2.png" alt="Subway Surf ModMenu" class="game-icon">
+          <p>Dinheiro + Gemas inffinitas + Versao atualizada</p>
+          <a href="https://www.mediafire.com/file/7av8bqrc6oog0lj/Shadow+Fight.apk/file" target="_blank" class="btn-download">Baixar APK</a>
+        </div>
+      </div>
     </div>
 
     <footer>
@@ -181,12 +287,35 @@
     const user = JSON.parse(localStorage.getItem('userData') || '{}');
     document.getElementById('userEmail').textContent = user.email || 'Usuário';
 
-    document.getElementById('logoutBtn').addEventListener('click', () => {
+    // Foto de perfil: Google se for login Google, senão user.png
+    const avatarEl = document.getElementById('userAvatar');
+    if (user.picture && user.loginMethod === 'google') {
+      avatarEl.src = user.picture;
+    }
+
+    // Toggle menu
+    const userProfile = document.getElementById('userAvatar');
+    const userMenu = document.getElementById('userMenu');
+
+    userProfile.addEventListener('click', (e) => {
+      e.stopPropagation();
+      userMenu.classList.toggle('active');
+    });
+
+    document.addEventListener('click', (e) => {
+      if (!userMenu.contains(e.target) && !document.querySelector('.profile-wrapper').contains(e.target)) {
+        userMenu.classList.remove('active');
+      }
+    });
+
+    // Logout
+    document.getElementById('logoutMenu').addEventListener('click', (e) => {
+      e.preventDefault();
       localStorage.removeItem('userData');
       localStorage.removeItem('userLoggedIn');
       window.location.href = 'index.html';
     });
   </script>
 
-</body>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9cd609baaeb977f4',t:'MTc3MTAwMzY2Mi4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
