@@ -217,6 +217,7 @@
       if (password.length < 6) return showAlert('Senha muito curta (mínimo 6 caracteres)', 'error');
 
       if (!isCadastro) {
+        // Login simples (sem verificação por enquanto)
         const user = {name: email.split('@')[0], email, picture: '', loginMethod: 'email', loggedIn: true};
         localStorage.setItem('userData', JSON.stringify(user));
         localStorage.setItem('userLoggedIn', 'true');
@@ -224,6 +225,7 @@
         return;
       }
 
+      // Cadastro → envia código
       currentEmail = email;
       try {
         const res = await fetch('http://127.0.0.1:5000/api/send-verification', {
@@ -232,23 +234,21 @@
           body: JSON.stringify({ email, nome })
         });
 
-        if (!res.ok) {
-          const text = await res.text();
-          console.log('Resposta do servidor (não JSON):', text.substring(0, 200));
-          throw new Error(`Erro do servidor: ${res.status} - Veja console para detalhes`);
-        }
-
         const data = await res.json();
 
-        if (!data.success) throw new Error(data.message || 'Falha ao enviar código');
+        if (!data.success) {
+          console.error('Erro do servidor:', data);
+          throw new Error(data.message || `Erro ${res.status}`);
+        }
 
         verificationCode = data.code;
         document.getElementById('emailSent').textContent = email;
         document.getElementById('verificationModal').classList.add('active');
         document.getElementById('code1').focus();
+        showAlert('Código enviado! Verifique seu email.', 'success');
       } catch (err) {
         console.error('Erro completo:', err);
-        showAlert(err.message || 'Erro ao conectar com o servidor. Certifique-se de que o Python está rodando.', 'error');
+        showAlert(err.message || 'Erro ao conectar com o servidor. Verifique se o backend está rodando.', 'error');
       }
     });
 
