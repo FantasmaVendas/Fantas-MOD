@@ -5,30 +5,166 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Login & Cadastro</title>
 
-  <script src="https://accounts.google.com/gsi/client" async defer></script>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" 
+        integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" 
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
 
   <style>
-    /* Seu CSS original aqui – mantive igual ao que você enviou */
     * { margin:0; padding:0; box-sizing:border-box; }
-    body { font-family: system-ui, -apple-system, sans-serif; min-height: 100vh; background: linear-gradient(135deg, #e5e7eb 0%, #f3f4f6 50%, #e5e7eb 100%); display: flex; align-items: center; justify-content: center; padding: 20px; color: #111827; }
-    .container { background: white; width: 100%; max-width: 420px; padding: 2.5rem 2.2rem; border-radius: 16px; box-shadow: 0 10px 25px -5px rgba(0,0,0,0.1); border: 1px solid #e5e7eb; transition: transform 0.2s ease; }
-    .container:hover { transform: translateY(-4px); }
-    /* ... resto do seu CSS original ... */
-    /* (copie o CSS completo que você tinha aqui para não ficar gigante) */
+    body {
+      font-family: system-ui, -apple-system, sans-serif;
+      min-height: 100vh;
+      background: linear-gradient(135deg, #e5e7eb, #f3f4f6);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      color: #111827;
+    }
+    .container {
+      background: white;
+      width: 100%;
+      max-width: 420px;
+      padding: 2.5rem 2rem;
+      border-radius: 16px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+      border: 1px solid #e5e7eb;
+    }
+    .header { text-align: center; margin-bottom: 2rem; }
+    .header h1 { font-size: 1.9rem; font-weight: 700; margin-bottom: 0.4rem; }
+    .header p { color: #6b7280; font-size: 0.95rem; }
+
+    .form-group { margin-bottom: 1.5rem; }
+    label { display: block; margin-bottom: 0.5rem; font-size: 0.9rem; font-weight: 500; color: #374151; }
+    input {
+      width: 100%;
+      padding: 0.9rem 1rem;
+      border: 1px solid #d1d5db;
+      border-radius: 8px;
+      font-size: 1rem;
+      background: #f9fafb;
+    }
+    input:focus {
+      outline: none;
+      border-color: #6b7280;
+      box-shadow: 0 0 0 3px rgba(107,114,128,0.15);
+      background: white;
+    }
+
+    .password-wrapper { position: relative; }
+    .password-wrapper input { padding-right: 3.5rem; }
+    .toggle-password {
+      position: absolute;
+      right: 1rem;
+      top: 50%;
+      transform: translateY(-50%);
+      background: none;
+      border: none;
+      cursor: pointer;
+      font-size: 1.3rem;
+      color: #6b7280;
+    }
+    .toggle-password:hover { color: #111827; }
+
+    .btn {
+      width: 100%;
+      padding: 0.95rem;
+      border: none;
+      border-radius: 8px;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+      margin: 0.8rem 0;
+    }
+    .btn-primary { background: #111827; color: white; }
+    .btn-primary:hover { background: #1f2937; }
+
+    .toggle-link { text-align: center; margin-top: 1.5rem; font-size: 0.95rem; color: #6b7280; }
+    .toggle-link a { color: #374151; font-weight: 500; text-decoration: none; }
+    .toggle-link a:hover { text-decoration: underline; }
+
+    .cadastro-only { display: none; }
+    .is-cadastro .cadastro-only { display: block; }
+    .is-cadastro .login-only { display: none; }
+
+    /* Modal */
+    .modal {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.5);
+      z-index: 1000;
+      align-items: center;
+      justify-content: center;
+    }
+    .modal.active { display: flex; }
+    .modal-content {
+      background: white;
+      padding: 2.5rem;
+      border-radius: 16px;
+      max-width: 400px;
+      width: 90%;
+      text-align: center;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+    }
+    .modal-content h2 { margin-bottom: 1rem; font-size: 1.5rem; }
+    .modal-content p { color: #6b7280; margin-bottom: 1.5rem; }
+    .code-input {
+      font-size: 2.2rem;
+      letter-spacing: 1rem;
+      text-align: center;
+      font-weight: bold;
+      font-family: monospace;
+      padding: 1rem;
+      margin: 1.5rem 0;
+      width: 100%;
+      border: 1px solid #d1d5db;
+      border-radius: 8px;
+    }
+    .resend-link {
+      color: #2563eb;
+      cursor: pointer;
+      text-decoration: underline;
+      font-size: 0.9rem;
+    }
+    .resend-link:hover { color: #1d4ed8; }
+
+    .alert {
+      padding: 0.8rem;
+      border-radius: 8px;
+      margin-bottom: 1rem;
+      font-size: 0.9rem;
+    }
+    .alert-success { background: #d1fae5; color: #065f46; border: 1px solid #6ee7b7; }
+    .alert-error   { background: #fee2e2;   color: #991b1b; border: 1px solid #fca5a5; }
+
+    .loader {
+      border: 3px solid #f3f4f6;
+      border-top: 3px solid #111827;
+      border-radius: 50%;
+      width: 20px;
+      height: 20px;
+      animation: spin 1s linear infinite;
+      display: inline-block;
+      margin-left: 8px;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
   </style>
 </head>
 <body>
 
   <div class="container" id="authContainer">
+
     <div class="header">
       <h1 id="formTitle">Entrar</h1>
-      <p id="formSubtitle">Use sua conta Google ou credenciais</p>
+      <p id="formSubtitle">Use suas credenciais</p>
     </div>
 
     <div id="alertBox"></div>
 
     <form id="authForm">
+
       <div class="form-group cadastro-only">
         <label for="nome">Nome completo</label>
         <input type="text" id="nome" placeholder="Seu nome" autocomplete="name">
@@ -43,7 +179,9 @@
         <label for="password">Senha</label>
         <div class="password-wrapper">
           <input type="password" id="password" placeholder="••••••••" required autocomplete="current-password">
-          <button type="button" class="toggle-password" id="togglePass"><i class="fas fa-eye" id="eyeIcon"></i></button>
+          <button type="button" class="toggle-password" id="togglePass">
+            <i class="fas fa-eye" id="eyeIcon"></i>
+          </button>
         </div>
       </div>
 
@@ -51,42 +189,34 @@
         <label for="passwordConfirm">Confirmar senha</label>
         <div class="password-wrapper">
           <input type="password" id="passwordConfirm" placeholder="••••••••" autocomplete="new-password">
-          <button type="button" class="toggle-password" id="togglePassConfirm"><i class="fas fa-eye" id="eyeIconConfirm"></i></button>
+          <button type="button" class="toggle-password" id="togglePassConfirm">
+            <i class="fas fa-eye" id="eyeIconConfirm"></i>
+          </button>
         </div>
       </div>
 
       <button type="submit" class="btn btn-primary" id="submitBtn">Entrar</button>
 
-      <div class="google-button-wrapper">
-        <div id="g_id_onload" data-client_id="455017979288-segvpalrj7te0k0ue22pek5ku114gt4c.apps.googleusercontent.com" data-callback="handleGoogleLogin" data-auto_prompt="false"></div>
-        <div class="g_id_signin" id="googleBtn" data-type="standard" data-size="large" data-theme="outline" data-text="signin_with" data-shape="rectangular" data-logo_alignment="left"></div>
-      </div>
-
-      <div class="google-button-wrapper" id="savedEmailWrapper" style="display: none;">
-        <button type="button" class="btn btn-google" id="savedEmailBtn">
-          <i class="fas fa-user-circle" style="font-size: 24px; color: #6b7280;"></i>
-          Continuar como <span id="savedEmailShort"></span>
-        </button>
-      </div>
     </form>
 
     <div class="toggle-link">
       <span id="toggleText">Ainda não tem conta?</span>
       <a href="#" id="toggleMode">Criar conta</a>
     </div>
+
   </div>
 
   <!-- Modal de Verificação -->
   <div class="modal" id="verificationModal">
     <div class="modal-content">
-      <h2>📧 Verifique seu email</h2>
+      <h2>Verifique seu email</h2>
       <p>Enviamos um código de 6 dígitos para<br><strong id="emailSent"></strong></p>
       
       <input type="text" id="codeInput" class="code-input" maxlength="6" placeholder="000000" autocomplete="off">
       
       <button class="btn btn-primary" id="verifyBtn">Verificar código</button>
       
-      <p style="margin-top: 1.5rem; font-size: 0.85rem;">
+      <p style="margin-top: 1.5rem;">
         Não recebeu? <span class="resend-link" id="resendCode">Reenviar código</span>
       </p>
     </div>
@@ -101,46 +231,175 @@
 
     let isCadastro = false;
     let currentEmail = '';
+
     const toggleMode = document.getElementById('toggleMode');
     const authContainer = document.getElementById('authContainer');
     const formTitle = document.getElementById('formTitle');
     const formSubtitle = document.getElementById('formSubtitle');
     const submitBtn = document.getElementById('submitBtn');
     const toggleText = document.getElementById('toggleText');
-    const googleBtn = document.getElementById('googleBtn');
-    const verificationModal = document.getElementById('verificationModal');
-    const alertBox = document.getElementById('alertBox');
 
     toggleMode.addEventListener('click', (e) => {
       e.preventDefault();
       isCadastro = !isCadastro;
       authContainer.classList.toggle('is-cadastro', isCadastro);
+      
       formTitle.textContent = isCadastro ? 'Criar conta' : 'Entrar';
-      formSubtitle.textContent = isCadastro ? 'Preencha os dados ou use o Google' : 'Use sua conta Google ou credenciais';
+      formSubtitle.textContent = isCadastro ? 'Preencha os dados abaixo' : 'Use suas credenciais';
       submitBtn.textContent = isCadastro ? 'Criar conta' : 'Entrar';
       toggleText.textContent = isCadastro ? 'Já tem conta?' : 'Ainda não tem conta?';
       toggleMode.textContent = isCadastro ? 'Fazer login' : 'Criar conta';
-      googleBtn.setAttribute('data-text', isCadastro ? 'signup_with' : 'signin_with');
     });
 
-    function createToggleHandler(inputId, iconId) {
-      return function() {
-        const input = document.getElementById(inputId);
-        const icon = document.getElementById(iconId);
-        if (input.type === 'password') {
-          input.type = 'text';
-          icon.classList.replace('fa-eye', 'fa-eye-slash');
-        } else {
-          input.type = 'password';
-          icon.classList.replace('fa-eye-slash', 'fa-eye');
-        }
-      };
+    // Mostrar / esconder senha
+    function togglePassword(inputId, iconId) {
+      const input = document.getElementById(inputId);
+      const icon = document.getElementById(iconId);
+      if (input.type === 'password') {
+        input.type = 'text';
+        icon.classList.replace('fa-eye', 'fa-eye-slash');
+      } else {
+        input.type = 'password';
+        icon.classList.replace('fa-eye-slash', 'fa-eye');
+      }
     }
-    document.getElementById('togglePass').addEventListener('click', createToggleHandler('password', 'eyeIcon'));
-    document.getElementById('togglePassConfirm').addEventListener('click', createToggleHandler('passwordConfirm', 'eyeIconConfirm'));
 
-    // ... resto do seu script original (savedEmail, Google, alerts, sendVerificationCode, submit, verify, resend, input only numbers) ...
-    // Mantenha exatamente como estava, pois já está integrado com /send-verification e /verify-code
+    document.getElementById('togglePass').addEventListener('click', () => togglePassword('password', 'eyeIcon'));
+    document.getElementById('togglePassConfirm').addEventListener('click', () => togglePassword('passwordConfirm', 'eyeIconConfirm'));
+
+    function showAlert(message, type = 'error') {
+      const alertBox = document.getElementById('alertBox');
+      alertBox.innerHTML = `<div class="alert alert-${type}">${message}</div>`;
+      setTimeout(() => alertBox.innerHTML = '', 5000);
+    }
+
+    async function sendVerificationCode(email) {
+      try {
+        submitBtn.disabled = true;
+        submitBtn.innerHTML = 'Enviando... <span class="loader"></span>';
+
+        const res = await fetch(`${API_URL}/send-verification`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email })
+        });
+
+        const data = await res.json();
+
+        if (data.success) {
+          currentEmail = email;
+          document.getElementById('emailSent').textContent = email;
+          document.getElementById('verificationModal').classList.add('active');
+          document.getElementById('codeInput').value = '';
+          document.getElementById('codeInput').focus();
+        } else {
+          showAlert(data.message || 'Erro ao enviar código', 'error');
+        }
+      } catch (err) {
+        showAlert('Erro de conexão', 'error');
+      } finally {
+        submitBtn.disabled = false;
+        submitBtn.textContent = isCadastro ? 'Criar conta' : 'Entrar';
+      }
+    }
+
+    document.getElementById('authForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      const email = document.getElementById('email').value.trim();
+      const password = document.getElementById('password').value;
+      const passwordConfirm = document.getElementById('passwordConfirm')?.value;
+
+      if (!email || !password) {
+        showAlert('Preencha email e senha', 'error');
+        return;
+      }
+
+      if (password.length < 6) {
+        showAlert('A senha deve ter pelo menos 6 caracteres', 'error');
+        return;
+      }
+
+      if (isCadastro) {
+        if (password !== passwordConfirm) {
+          showAlert('As senhas não coincidem', 'error');
+          return;
+        }
+        await sendVerificationCode(email);
+      } else {
+        // Login simples (sem verificação por enquanto)
+        const user = {
+          name: email.split('@')[0],
+          email,
+          loginMethod: 'email',
+          loggedIn: true
+        };
+        localStorage.setItem('userData', JSON.stringify(user));
+        localStorage.setItem('userLoggedIn', 'true');
+        window.location.href = 'dashboard.html';
+      }
+    });
+
+    // Verificar código
+    document.getElementById('verifyBtn').addEventListener('click', async () => {
+      const code = document.getElementById('codeInput').value.trim();
+
+      if (code.length !== 6 || !/^\d{6}$/.test(code)) {
+        showAlert('Digite o código de 6 dígitos', 'error');
+        return;
+      }
+
+      try {
+        const verifyBtn = document.getElementById('verifyBtn');
+        verifyBtn.disabled = true;
+        verifyBtn.innerHTML = 'Verificando... <span class="loader"></span>';
+
+        const res = await fetch(`${API_URL}/verify-code`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email: currentEmail, code })
+        });
+
+        const data = await res.json();
+
+        if (data.success) {
+          const user = {
+            name: document.getElementById('nome')?.value || currentEmail.split('@')[0],
+            email: currentEmail,
+            loginMethod: 'email',
+            loggedIn: true,
+            verified: true
+          };
+          localStorage.setItem('userData', JSON.stringify(user));
+          localStorage.setItem('userLoggedIn', 'true');
+
+          document.getElementById('verificationModal').classList.remove('active');
+          showAlert('Conta criada com sucesso!', 'success');
+
+          setTimeout(() => window.location.href = 'dashboard.html', 1200);
+        } else {
+          showAlert(data.message || 'Código incorreto', 'error');
+          verifyBtn.disabled = false;
+          verifyBtn.textContent = 'Verificar código';
+        }
+      } catch (err) {
+        showAlert('Erro de conexão', 'error');
+        document.getElementById('verifyBtn').disabled = false;
+        document.getElementById('verifyBtn').textContent = 'Verificar código';
+      }
+    });
+
+    // Reenviar código
+    document.getElementById('resendCode').addEventListener('click', async () => {
+      await sendVerificationCode(currentEmail);
+      showAlert('Novo código enviado!', 'success');
+    });
+
+    // Só números no campo de código
+    document.getElementById('codeInput').addEventListener('input', (e) => {
+      e.target.value = e.target.value.replace(/\D/g, '');
+    });
   </script>
+
 </body>
 </html>
