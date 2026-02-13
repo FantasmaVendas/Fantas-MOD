@@ -7,212 +7,42 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
 
   <style>
-    body {
-      font-family: system-ui, sans-serif;
-      background: linear-gradient(135deg, #e5e7eb, #f3f4f6);
-      min-height: 100vh;
-      margin: 0;
-      color: #111827;
-    }
-    .header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 1rem 1.5rem;
-      background: white;
-      border-bottom: 1px solid #d1d5db;
-      position: sticky;
-      top: 0;
-      z-index: 1000;
-      box-shadow: 0 2px 10px rgba(0,0,0,0.05);
-    }
+    body { font-family: system-ui, sans-serif; background: linear-gradient(135deg, #e5e7eb, #f3f4f6); min-height: 100vh; margin: 0; color: #111827; }
+    .header { display: flex; justify-content: space-between; align-items: center; padding: 1rem 1.5rem; background: white; border-bottom: 1px solid #d1d5db; position: sticky; top: 0; z-index: 1000; box-shadow: 0 2px 10px rgba(0,0,0,0.05); }
     h1 { font-size: 1.6rem; margin: 0; }
     .user-area { position: relative; }
-    .profile-wrapper {
-      position: relative;
-      width: 44px;
-      height: 44px;
-      cursor: pointer;
-    }
-    .profile-circle {
-      position: absolute;
-      inset: 0;
-      background: url('circle.png') no-repeat center center;
-      background-size: contain;
-      border: 3px solid #00f0ff;
-      border-radius: 50%;
-      pointer-events: none;
-      z-index: 2;
-      box-sizing: border-box;
-    }
-    .user-profile {
-      width: 70%;
-      height: 70%;
-      margin: 15%;
-      border-radius: 50%;
-      object-fit: cover;
-      position: relative;
-      z-index: 1;
-    }
-    .user-menu {
-      display: none;
-      position: absolute;
-      top: 55px;
-      right: 0;
-      background: url('BackgroundMenu.png') no-repeat center center;
-      background-size: cover;
-      border-radius: 12px;
-      box-shadow: 0 10px 25px rgba(0,0,0,0.18);
-      min-width: 170px;
-      z-index: 100;
-      overflow: hidden;
-      border: 1px solid #e5e7eb;
-    }
+    .profile-wrapper { position: relative; width: 44px; height: 44px; cursor: pointer; }
+    .profile-circle { position: absolute; inset: 0; background: url('circle.png') no-repeat center center; background-size: contain; border: 3px solid #00f0ff; border-radius: 50%; pointer-events: none; z-index: 2; box-sizing: border-box; }
+    .user-profile { width: 70%; height: 70%; margin: 15%; border-radius: 50%; object-fit: cover; position: relative; z-index: 1; }
+    .user-menu { display: none; position: absolute; top: 55px; right: 0; background: url('BackgroundMenu.png') no-repeat center center; background-size: cover; border-radius: 12px; box-shadow: 0 10px 25px rgba(0,0,0,0.18); min-width: 170px; z-index: 100; overflow: hidden; border: 1px solid #e5e7eb; }
     .user-menu.active { display: block; }
-    .menu-item {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      padding: 10px 14px;
-      color: #111827;
-      text-decoration: none;
-      font-weight: 500;
-      transition: background 0.2s;
-      background: rgba(255,255,255,0.7);
-    }
+    .menu-item { display: flex; align-items: center; gap: 10px; padding: 10px 14px; color: #111827; text-decoration: none; font-weight: 500; transition: background 0.2s; background: rgba(255,255,255,0.7); }
     .menu-item:hover { background: rgba(243,244,246,0.9); }
     .menu-item img { width: 22px; height: 22px; object-fit: contain; }
-    .menu-item.logout {
-      color: #dc2626;
-      border-top: 1px solid #e5e7eb;
-    }
+    .menu-item.logout { color: #dc2626; border-top: 1px solid #e5e7eb; }
     .menu-item.logout:hover { background: rgba(254,226,226,0.9); }
 
-    .container {
-      max-width: 380px;
-      width: 100%;
-      margin: 1.5rem auto;
-      padding: 1.4rem 1.2rem;
-      background: white;
-      border-radius: 14px;
-      box-shadow: 0 6px 16px rgba(0,0,0,0.07);
-    }
-    .section-title {
-      font-size: 1.1rem;
-      font-weight: 600;
-      margin: 1.2rem 0 0.6rem;
-      color: #374151;
-    }
-    .dev-card {
-      background: #f8fafc;
-      border: 1px solid #e5e7eb;
-      border-radius: 10px;
-      padding: 1rem;
-      margin-bottom: 1rem;
-    }
-    .dev-header {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      margin-bottom: 0.8rem;
-    }
-    .dev-avatar {
-      width: 50px;
-      height: 50px;
-      border-radius: 50%;
-      object-fit: cover;
-      border: 2px solid #e5e7eb;
-    }
+    .container { max-width: 380px; width: 100%; margin: 1.5rem auto; padding: 1.4rem 1.2rem; background: white; border-radius: 14px; box-shadow: 0 6px 16px rgba(0,0,0,0.07); }
+    .section-title { font-size: 1.1rem; font-weight: 600; margin: 1.2rem 0 0.6rem; color: #374151; }
+    .dev-card { background: #f8fafc; border: 1px solid #e5e7eb; border-radius: 10px; padding: 1rem; margin-bottom: 1rem; }
+    .dev-header { display: flex; align-items: center; gap: 10px; margin-bottom: 0.8rem; }
+    .dev-avatar { width: 50px; height: 50px; border-radius: 50%; object-fit: cover; border: 2px solid #e5e7eb; }
     .dev-name { font-size: 1.1rem; font-weight: 700; }
-    .btn-row {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-      justify-content: center;
-    }
-    .btn-contact {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      padding: 0.6rem 1.1rem;
-      border-radius: 8px;
-      font-size: 0.9rem;
-      font-weight: 600;
-      text-decoration: none;
-      color: white;
-      transition: all 0.2s;
-    }
-    .btn-whatsapp { background: #25D366; }
-    .btn-whatsapp:hover { background: #1da851; }
-    .btn-instagram { background: #E1306C; }
-    .btn-instagram:hover { background: #c6285c; }
+    .btn-row { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; }
+    .btn-contact { display: flex; align-items: center; gap: 6px; padding: 0.6rem 1.1rem; border-radius: 8px; font-size: 0.9rem; font-weight: 600; text-decoration: none; color: white; transition: all 0.2s; }
+    .btn-whatsapp { background: #25D366; } .btn-whatsapp:hover { background: #1da851; }
+    .btn-instagram { background: #E1306C; } .btn-instagram:hover { background: #c6285c; }
 
     .comment-area { margin-top: 1.5rem; position: relative; }
-    #comment-wrapper {
-      position: relative;
-      width: 305px;
-      margin: 0 auto;
-    }
-    #comment {
-      width: 100%;
-      min-height: 124px;
-      padding: 10px;
-      border: 1px solid #d1d5db;
-      border-radius: 8px;
-      font-size: 0.95rem;
-      resize: vertical;
-      box-sizing: border-box;
-      line-height: 1.4;
-      white-space: pre-wrap;
-    }
-    .mod-tag {
-      background: #e5e7eb;
-      color: #000;
-      padding: 2px 6px;
-      border-radius: 4px;
-      font-weight: 700;
-    }
-    #suggestions {
-      position: absolute;
-      top: 100%;
-      left: 0;
-      background: white;
-      border: 1px solid #d1d5db;
-      border-radius: 8px;
-      max-height: 160px;
-      overflow-y: auto;
-      width: 100%;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-      display: none;
-      z-index: 10;
-    }
-    .suggestion-item {
-      padding: 8px 12px;
-      cursor: pointer;
-    }
-    .suggestion-item:hover {
-      background: #f3f4f6;
-    }
-    .btn-send {
-      background: #3b82f6;
-      color: white;
-      border: none;
-      padding: 0.7rem;
-      border-radius: 8px;
-      font-weight: 600;
-      cursor: pointer;
-      width: 100%;
-      margin-top: 10px;
-    }
+    #comment-wrapper { position: relative; width: 305px; margin: 0 auto; }
+    #comment { width: 100%; min-height: 124px; padding: 10px; border: 1px solid #d1d5db; border-radius: 8px; font-size: 0.95rem; resize: vertical; box-sizing: border-box; line-height: 1.4; white-space: pre-wrap; }
+    .mod-tag { background: #e5e7eb; color: #000; padding: 2px 6px; border-radius: 4px; font-weight: 700; }
+    #suggestions { position: absolute; top: 100%; left: 0; background: white; border: 1px solid #d1d5db; border-radius: 8px; max-height: 160px; overflow-y: auto; width: 100%; box-shadow: 0 4px 12px rgba(0,0,0,0.1); display: none; z-index: 10; }
+    .suggestion-item { padding: 8px 12px; cursor: pointer; }
+    .suggestion-item:hover { background: #f3f4f6; }
+    .btn-send { background: #3b82f6; color: white; border: none; padding: 0.7rem; border-radius: 8px; font-weight: 600; cursor: pointer; width: 100%; margin-top: 10px; }
     .btn-send:hover { background: #2563eb; }
-    .back-link {
-      display: block;
-      text-align: center;
-      margin-top: 1.5rem;
-      color: #2563eb;
-      font-weight: 500;
-      text-decoration: none;
-    }
+    .back-link { display: block; text-align: center; margin-top: 1.5rem; color: #2563eb; font-weight: 500; text-decoration: none; }
     .back-link:hover { text-decoration: underline; }
   </style>
 </head>
@@ -222,25 +52,14 @@
     <h1>Suporte</h1>
     <div class="user-area">
       <div class="profile-wrapper">
-        <img 
-          id="userAvatar" 
-          src="user.png" 
-          alt="Perfil" 
-          class="user-profile"
-          onerror="this.src='https://www.clipartmax.com/png/middle/296-2969961_no-image-user-profile-icon.png';"
-        >
+        <img id="userAvatar" src="user.png" alt="Perfil" class="user-profile"
+             onerror="this.src='https://www.clipartmax.com/png/middle/296-2969961_no-image-user-profile-icon.png';">
         <div class="profile-circle"></div>
       </div>
       <div class="user-menu" id="userMenu">
-        <a href="dashboard.html" class="menu-item">
-          <img src="home.png" alt="Home"> Home
-        </a>
-        <a href="suporte.html" class="menu-item">
-          <img src="support.png" alt="Suporte"> Suporte
-        </a>
-        <a href="#" id="logoutMenu" class="menu-item logout">
-          <img src="exit.png" alt="Sair"> Sair
-        </a>
+        <a href="dashboard.html" class="menu-item"><img src="home.png" alt="Home"> Home</a>
+        <a href="suporte.html" class="menu-item"><img src="support.png" alt="Suporte"> Suporte</a>
+        <a href="#" id="logoutMenu" class="menu-item logout"><img src="exit.png" alt="Sair"> Sair</a>
       </div>
     </div>
   </header>
@@ -319,7 +138,7 @@
       userAvatar.src = user.picture;
     }
 
-    // Autocomplete e destaque corrigidos
+    // Autocomplete e destaque
     const commentDiv = document.getElementById('comment');
     const suggestionsDiv = document.getElementById('suggestions');
 
