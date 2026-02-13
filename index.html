@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Login & Cadastro</title>
 
-  <!-- Google Identity Services SDK -->
+  <!-- Google Identity Services -->
   <script src="https://accounts.google.com/gsi/client" async defer></script>
 
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" 
@@ -78,24 +78,32 @@
       font-weight: 600;
       cursor: pointer;
       transition: all 0.2s;
-      margin: 0.8rem 0;
+      margin: 0.8rem 0 0.4rem 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
     }
     .btn-primary { background: #111827; color: white; }
     .btn-primary:hover { background: #1f2937; }
 
-    /* Estilo para botão Google */
-    .google-button-wrapper {
-      margin: 1.5rem 0;
-      text-align: center;
+    /* Botão Google com mesmo tamanho e estilo aproximado */
+    .btn-google {
+      background: white;
+      border: 1px solid #d1d5db;
+      color: #111827;
+      font-weight: 500;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
     }
-    .g_id_signin {
-      width: 100% !important;
-      max-width: 380px !important;
-      height: 50px !important;
-      margin: 0 auto !important;
+    .btn-google:hover {
+      background: #f8f9fa;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+    }
+    .btn-google img {
+      height: 20px;
     }
 
-    .toggle-link { text-align: center; margin-top: 1.5rem; font-size: 0.95rem; color: #6b7280; }
+    .toggle-link { text-align: center; margin-top: 1.2rem; font-size: 0.95rem; color: #6b7280; }
     .toggle-link a { color: #374151; font-weight: 500; text-decoration: none; }
     .toggle-link a:hover { text-decoration: underline; }
 
@@ -213,22 +221,22 @@
 
     </form>
 
-    <!-- Botão Google Sign-In -->
-    <div class="google-button-wrapper">
-      <div id="g_id_onload"
-           data-client_id="455017979288-segvpalrj7te0k0ue22pek5ku114gt4c.apps.googleusercontent.com"
-           data-callback="handleGoogleLogin"
-           data-auto_prompt="false">
-      </div>
-      <div class="g_id_signin"
-           data-type="standard"
-           data-size="large"
-           data-theme="outline"
-           data-text="signin_with"
-           data-shape="rectangular"
-           data-logo_alignment="left">
-      </div>
+    <!-- Botão Google com mesmo tamanho do botão principal -->
+    <div id="g_id_onload"
+         data-client_id="455017979288-segvpalrj7te0k0ue22pek5ku114gt4c.apps.googleusercontent.com"
+         data-callback="handleGoogleLogin"
+         data-auto_prompt="false">
     </div>
+
+    <button class="btn btn-google g_id_signin"
+            data-type="standard"
+            data-size="large"
+            data-theme="outline"
+            data-text="signin_with"
+            data-shape="rectangular"
+            data-logo_alignment="left">
+      <!-- O conteúdo real é injetado pelo Google, mas o botão fica com o mesmo tamanho -->
+    </button>
 
     <div class="toggle-link">
       <span id="toggleText">Ainda não tem conta?</span>
@@ -282,7 +290,6 @@
       toggleMode.textContent = isCadastro ? 'Fazer login' : 'Criar conta';
     });
 
-    // Mostrar / esconder senha
     function togglePassword(inputId, iconId) {
       const input = document.getElementById(inputId);
       const icon = document.getElementById(iconId);
@@ -304,7 +311,6 @@
       setTimeout(() => alertBox.innerHTML = '', 5000);
     }
 
-    // Callback do Google Sign-In
     function handleGoogleLogin(response) {
       try {
         const payload = JSON.parse(atob(response.credential.split('.')[1]));
@@ -378,7 +384,6 @@
         }
         await sendVerificationCode(email);
       } else {
-        // Login simples (sem verificação por enquanto - ajuste se quiser)
         const user = {
           name: email.split('@')[0],
           email,
@@ -391,7 +396,6 @@
       }
     });
 
-    // Verificar código
     document.getElementById('verifyBtn').addEventListener('click', async () => {
       const code = document.getElementById('codeInput').value.trim();
 
@@ -440,13 +444,11 @@
       }
     });
 
-    // Reenviar código
     document.getElementById('resendCode').addEventListener('click', async () => {
       await sendVerificationCode(currentEmail);
       showAlert('Novo código enviado!', 'success');
     });
 
-    // Só números no campo de código
     document.getElementById('codeInput').addEventListener('input', (e) => {
       e.target.value = e.target.value.replace(/\D/g, '');
     });
