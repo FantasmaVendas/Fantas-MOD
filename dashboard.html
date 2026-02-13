@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Downloads de Jogos APK</title>
+  <title>Meus Jogos APK</title>
 
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
 
@@ -40,28 +40,28 @@
     }
     .profile-circle {
       position: absolute;
-      top: 0; left: 0;
-      width: 100%; height: 100%;
+      inset: 0;
       background: url('circle.png') no-repeat center center;
       background-size: contain;
       border: 3px solid #00f0ff;
       border-radius: 50%;
       pointer-events: none;
       z-index: 2;
-      box-sizing: border-box;
     }
     .user-profile {
-      width: 70%; height: 70%; margin: 15%;
+      width: 70%;
+      height: 70%;
+      margin: 15%;
       border-radius: 50%;
       object-fit: cover;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
       position: relative;
       z-index: 1;
     }
     .user-menu {
       display: none;
       position: absolute;
-      top: 60px; right: 0;
+      top: 60px;
+      right: 0;
       background: url('BackgroundMenu.png') no-repeat center center;
       background-size: cover;
       border-radius: 12px;
@@ -73,9 +73,13 @@
     }
     .user-menu.active { display: block; }
     .menu-item {
-      display: flex; align-items: center; gap: 12px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
       padding: 12px 16px;
-      color: #111827; text-decoration: none; font-weight: 500;
+      color: #111827;
+      text-decoration: none;
+      font-weight: 500;
       transition: background 0.2s;
       background: rgba(255,255,255,0.7);
     }
@@ -92,7 +96,6 @@
       border-radius: 8px;
       color: #92400e;
     }
-    .warning strong { color: #b45309; }
 
     .grid {
       display: grid;
@@ -100,46 +103,34 @@
       gap: 1.8rem;
     }
     .card {
-      background: url('Rectangle3.png') no-repeat center center;
-      background-size: cover;
+      background: #fff;
       border-radius: 12px;
       box-shadow: 0 4px 12px rgba(0,0,0,0.08);
       overflow: hidden;
       transition: transform 0.2s, box-shadow 0.2s;
-      text-align: center;
-      min-height: 380px;
     }
     .card:hover {
       transform: translateY(-6px);
       box-shadow: 0 10px 20px rgba(0,0,0,0.18);
     }
     .card-header {
-      background: rgba(0, 0, 0, 0.60);
+      background: #111827;
+      color: white;
       padding: 1.2rem;
       font-size: 1.35rem;
       font-weight: 700;
-      color: white;
-      text-shadow: 0 1px 3px rgba(0,0,0,0.6);
+      text-align: center;
     }
     .card-body {
-      background: rgba(255, 255, 255, 0.92);
       padding: 1.6rem 1.4rem;
-      border-radius: 0 0 12px 12px;
+      text-align: center;
     }
     .game-icon {
       width: 72px;
       height: 72px;
-      object-fit: contain;
       border-radius: 50%;
-      margin: 1rem auto 1.2rem;
+      margin-bottom: 1rem;
       border: 2px solid #e5e7eb;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-    }
-    .card-body p {
-      margin: 0.6rem 0 1.4rem 0;
-      color: #374151;
-      font-size: 0.97rem;
-      line-height: 1.4;
     }
     .btn-download {
       display: inline-block;
@@ -149,13 +140,10 @@
       text-decoration: none;
       border-radius: 8px;
       font-weight: 600;
-      font-size: 1rem;
-      transition: background 0.2s, transform 0.15s;
+      transition: background 0.2s;
     }
-    .btn-download:hover {
-      background: #1d4ed8;
-      transform: translateY(-2px);
-    }
+    .btn-download:hover { background: #1d4ed8; }
+
     footer {
       text-align: center;
       margin-top: 3.5rem;
@@ -177,7 +165,7 @@
           <img 
             id="userAvatar" 
             src="user.png" 
-            alt="Perfil do usuário" 
+            alt="Perfil" 
             class="user-profile"
             onerror="this.src='https://www.clipartmax.com/png/middle/296-2969961_no-image-user-profile-icon.png';"
           >
@@ -185,24 +173,21 @@
         </div>
         <div class="user-menu" id="userMenu">
           <a href="dashboard.html" class="menu-item">
-            <img src="home.png" alt="Home">
-            Home
+            <img src="home.png" alt="Home"> Home
           </a>
           <a href="suporte.html" class="menu-item">
-            <img src="support.png" alt="Suporte">
-            Suporte
+            <img src="support.png" alt="Suporte"> Suporte
           </a>
           <a href="#" id="logoutMenu" class="menu-item logout">
-            <img src="exit.png" alt="Sair">
-            Sair
+            <img src="exit.png" alt="Sair"> Sair
           </a>
         </div>
       </div>
     </header>
 
     <div class="warning">
-      <strong>Aviso de segurança:</strong><br>
-      Esses APKs são hospedados no MediaFire. Baixe apenas se confiar na fonte. Verifique com antivírus (VirusTotal) antes de instalar. Ative "Fontes desconhecidas" no Android só temporariamente.
+      <strong>Aviso importante:</strong><br>
+      Esses APKs são mods não oficiais. Use por sua conta e risco. Verifique com antivírus antes de instalar.
     </div>
 
     <div class="grid">
@@ -211,7 +196,7 @@
         <div class="card-header">Power Warriors</div>
         <div class="card-body">
           <img src="powerwarrios.png" alt="Power Warriors" class="game-icon">
-          <p>Versão 19.7 - Mod Menu + Última Versão + personagens desbloqueados</p>
+          <p>Versão 19.7 - Mod Menu + Personagens desbloqueados</p>
           <a href="https://www.mediafire.com/file/hjd4zyv8hrjfrxk/Power+Warriors_19.7.apk/file" target="_blank" class="btn-download">Baixar APK (19.7)</a>
         </div>
       </div>
@@ -220,7 +205,7 @@
         <div class="card-header">Clash Royale</div>
         <div class="card-body">
           <img src="ClashIcon.png" alt="Clash Royale" class="game-icon">
-          <p>Versão mais recente - Servidor Privado + Última Atualização + recursos desbloqueados</p>
+          <p>Servidor Privado + Recursos desbloqueados</p>
           <a href="https://www.mediafire.com/file/5jgo39jjp3x7o9y/ClashRoyale.apk/file" target="_blank" class="btn-download">Baixar APK</a>
         </div>
       </div>
@@ -228,25 +213,18 @@
       <div class="card">
         <div class="card-header">Subway Surf</div>
         <div class="card-body">
-          <img src="SubwayIcon.png" alt="Subway Surf ModMenu" class="game-icon">
-          <p>Versão mais recente - Mod Menu + Necessita de ADB</p>
+          <img src="SubwayIcon.png" alt="Subway Surf" class="game-icon">
+          <p>Mod Menu + Necessita ADB (versão mais recente)</p>
           <a href="https://www.mediafire.com/file/cohv3tohfsgm2zx/SubwaySuf.apk/file" target="_blank" class="btn-download">Baixar APK</a>
         </div>
       </div>
 
-      <div class="card">
-        <div class="card-header">Shadown Fight 2</div>
-        <div class="card-body">
-          <img src="ShadowFight2.png" alt="Shadown Fight 2" class="game-icon">
-          <p>Dinheiro + Gemas infinitas + Versão atualizada</p>
-          <a href="https://www.mediafire.com/file/7av8bqrc6oog0lj/Shadow+Fight.apk/file" target="_blank" class="btn-download">Baixar APK</a>
-        </div>
-      </div>
+      <!-- pode adicionar mais cards aqui -->
 
     </div>
 
     <footer>
-      Área logada como <strong id="userEmail">carregando...</strong> • Hospedado por você • 2026
+      Área logada como <strong id="userEmail">carregando...</strong> • 2026
     </footer>
 
   </div>
@@ -257,23 +235,47 @@
     }
 
     const user = JSON.parse(localStorage.getItem('userData') || '{}');
-    document.getElementById('userEmail').textContent = user.email || 'Usuário';
 
+    // Avatar
     const avatarEl = document.getElementById('userAvatar');
-    if (user.picture && user.loginMethod === 'google') {
+    if (user.picture) {
       avatarEl.src = user.picture;
     }
 
-    const userProfile = document.getElementById('userAvatar');
+    // Nome + status admin
+    let displayName = user.name || user.email || 'Usuário';
+    if (user.isAdmin) {
+      displayName += ' (Admin)';
+    }
+    document.getElementById('userEmail').textContent = displayName;
+
+    // Bloqueio para visitante
+    if (user.isVisitor) {
+      document.querySelectorAll('.btn-download').forEach(btn => {
+        btn.style.background = '#9ca3af';
+        btn.style.cursor = 'not-allowed';
+        btn.textContent = '🔒 Requer login';
+        btn.removeAttribute('href');
+        btn.onclick = function(e) {
+          e.preventDefault();
+          alert('No modo Visitante você não pode baixar mods.\nFaça login normal ou use token de administrador.');
+        };
+      });
+
+      document.querySelector('footer').innerHTML += '<br><strong style="color:#ef4444">Modo Visitante • Downloads bloqueados</strong>';
+    }
+
+    // Menu dropdown
+    const userAvatar = document.getElementById('userAvatar');
     const userMenu = document.getElementById('userMenu');
 
-    userProfile.addEventListener('click', (e) => {
+    userAvatar.addEventListener('click', (e) => {
       e.stopPropagation();
       userMenu.classList.toggle('active');
     });
 
     document.addEventListener('click', (e) => {
-      if (!userMenu.contains(e.target) && !document.querySelector('.profile-wrapper').contains(e.target)) {
+      if (!userMenu.contains(e.target) && e.target !== userAvatar) {
         userMenu.classList.remove('active');
       }
     });
