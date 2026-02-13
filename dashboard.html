@@ -3,287 +3,359 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Downloads de Jogos APK</title>
+  <title>Login & Cadastro - Meus Jogos APK</title>
 
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+  <!-- Google Identity Services -->
+  <script src="https://accounts.google.com/gsi/client" async defer></script>
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" 
+        integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" 
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
 
   <style>
+    * { margin:0; padding:0; box-sizing:border-box; }
     body {
-      font-family: system-ui, sans-serif;
-      background: linear-gradient(135deg, #e5e7eb, #f3f4f6);
+      font-family: system-ui, -apple-system, sans-serif;
       min-height: 100vh;
-      margin: 0;
+      background: linear-gradient(135deg, #e5e7eb, #f3f4f6);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
       color: #111827;
     }
     .container {
-      max-width: 900px;
-      margin: 0 auto;
-      padding: 2rem 1.5rem;
-    }
-    header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 2.5rem;
-      padding-bottom: 1rem;
-      border-bottom: 1px solid #d1d5db;
-      position: relative;
-    }
-    h1 { font-size: 2.2rem; margin: 0; }
-
-    .user-area { position: relative; }
-    .profile-wrapper {
-      position: relative;
-      width: 48px;
-      height: 48px;
-      cursor: pointer;
-    }
-    .profile-circle {
-      position: absolute;
-      top: 0; left: 0;
-      width: 100%; height: 100%;
-      background: url('circle.png') no-repeat center center;
-      background-size: contain;
-      border: 3px solid #00f0ff;
-      border-radius: 50%;
-      pointer-events: none;
-      z-index: 2;
-      box-sizing: border-box;
-    }
-    .user-profile {
-      width: 70%; height: 70%; margin: 15%;
-      border-radius: 50%;
-      object-fit: cover;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-      position: relative;
-      z-index: 1;
-    }
-    .user-menu {
-      display: none;
-      position: absolute;
-      top: 60px; right: 0;
-      background: url('BackgroundMenu.png') no-repeat center center;
-      background-size: cover;
-      border-radius: 12px;
-      box-shadow: 0 10px 25px rgba(0,0,0,0.18);
-      min-width: 180px;
-      z-index: 100;
-      overflow: hidden;
+      background: white;
+      width: 100%;
+      max-width: 420px;
+      padding: 2.5rem 2rem;
+      border-radius: 16px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.1);
       border: 1px solid #e5e7eb;
     }
-    .user-menu.active { display: block; }
-    .menu-item {
-      display: flex; align-items: center; gap: 12px;
-      padding: 12px 16px;
-      color: #111827; text-decoration: none; font-weight: 500;
-      transition: background 0.2s;
-      background: rgba(255,255,255,0.7);
-    }
-    .menu-item:hover { background: rgba(243,244,246,0.9); }
-    .menu-item img { width: 24px; height: 24px; object-fit: contain; }
-    .menu-item.logout { color: #dc2626; border-top: 1px solid #e5e7eb; }
-    .menu-item.logout:hover { background: rgba(254,226,226,0.9); }
+    .header { text-align: center; margin-bottom: 2rem; }
+    .header h1 { font-size: 1.9rem; font-weight: 700; margin-bottom: 0.4rem; }
+    .header p { color: #6b7280; font-size: 0.95rem; }
 
-    .warning {
-      background: #fef3c7;
-      border-left: 5px solid #d97706;
-      padding: 1.2rem;
-      margin-bottom: 2rem;
+    .form-group { margin-bottom: 1.5rem; }
+    label { display: block; margin-bottom: 0.5rem; font-size: 0.9rem; font-weight: 500; color: #374151; }
+    input {
+      width: 100%;
+      padding: 0.9rem 1rem;
+      border: 1px solid #d1d5db;
       border-radius: 8px;
-      color: #92400e;
-    }
-    .warning strong { color: #b45309; }
-
-    .grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-      gap: 1.8rem;
-    }
-    .card {
-      background: url('Rectangle3.png') no-repeat center center;
-      background-size: cover;
-      border-radius: 12px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
-      overflow: hidden;
-      transition: transform 0.2s, box-shadow 0.2s;
-      text-align: center;
-      min-height: 380px;
-    }
-    .card:hover {
-      transform: translateY(-6px);
-      box-shadow: 0 10px 20px rgba(0,0,0,0.18);
-    }
-    .card-header {
-      background: rgba(0, 0, 0, 0.60);
-      padding: 1.2rem;
-      font-size: 1.35rem;
-      font-weight: 700;
-      color: white;
-      text-shadow: 0 1px 3px rgba(0,0,0,0.6);
-    }
-    .card-body {
-      background: rgba(255, 255, 255, 0.92);
-      padding: 1.6rem 1.4rem;
-      border-radius: 0 0 12px 12px;
-    }
-    .game-icon {
-      width: 72px;
-      height: 72px;
-      object-fit: contain;
-      border-radius: 50%;
-      margin: 1rem auto 1.2rem;
-      border: 2px solid #e5e7eb;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-    }
-    .card-body p {
-      margin: 0.6rem 0 1.4rem 0;
-      color: #374151;
-      font-size: 0.97rem;
-      line-height: 1.4;
-    }
-    .btn-download {
-      display: inline-block;
-      padding: 0.9rem 1.7rem;
-      background: #2563eb;
-      color: white;
-      text-decoration: none;
-      border-radius: 8px;
-      font-weight: 600;
       font-size: 1rem;
-      transition: background 0.2s, transform 0.15s;
+      background: #f9fafb;
     }
-    .btn-download:hover {
-      background: #1d4ed8;
-      transform: translateY(-2px);
+    input:focus {
+      outline: none;
+      border-color: #6b7280;
+      box-shadow: 0 0 0 3px rgba(107,114,128,0.15);
+      background: white;
     }
-    footer {
-      text-align: center;
-      margin-top: 3.5rem;
-      padding: 1.5rem;
+
+    .password-wrapper { position: relative; }
+    .password-wrapper input { padding-right: 3.5rem; }
+    .toggle-password {
+      position: absolute;
+      right: 1rem;
+      top: 50%;
+      transform: translateY(-50%);
+      background: none;
+      border: none;
+      cursor: pointer;
+      font-size: 1.3rem;
       color: #6b7280;
+    }
+    .toggle-password:hover { color: #111827; }
+
+    .btn {
+      width: 100%;
+      padding: 0.95rem;
+      border: none;
+      border-radius: 8px;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+      margin: 0.6rem 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+    }
+    .btn-primary { background: #111827; color: white; }
+    .btn-primary:hover { background: #1f2937; }
+    .btn-visitor { background: #10b981; color: white; }
+    .btn-admin { background: #ef4444; color: white; }
+    .btn-google {
+      background: white;
+      border: 1px solid #d1d5db;
+      color: #111827;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    }
+    .btn-google:hover { background: #f8f9fa; }
+
+    .toggle-link { text-align: center; margin-top: 1.2rem; font-size: 0.95rem; color: #6b7280; }
+    .toggle-link a { color: #374151; font-weight: 500; text-decoration: none; }
+    .cadastro-only { display: none; }
+    .is-cadastro .cadastro-only { display: block; }
+
+    .alert {
+      padding: 0.8rem;
+      border-radius: 8px;
+      margin-bottom: 1rem;
       font-size: 0.9rem;
     }
+    .alert-success { background: #d1fae5; color: #065f46; border: 1px solid #6ee7b7; }
+    .alert-error   { background: #fee2e2;   color: #991b1b; border: 1px solid #fca5a5; }
   </style>
 </head>
 <body>
 
-  <div class="container">
+  <div class="container" id="authContainer">
 
-    <header>
-      <h1>Meus Jogos APK</h1>
-
-      <div class="user-area">
-        <div class="profile-wrapper">
-          <img 
-            id="userAvatar" 
-            src="user.png" 
-            alt="Perfil do usuário" 
-            class="user-profile"
-            onerror="this.src='https://www.clipartmax.com/png/middle/296-2969961_no-image-user-profile-icon.png';"
-          >
-          <div class="profile-circle"></div>
-        </div>
-        <div class="user-menu" id="userMenu">
-          <a href="dashboard.html" class="menu-item">
-            <img src="home.png" alt="Home">
-            Home
-          </a>
-          <a href="suporte.html" class="menu-item">
-            <img src="support.png" alt="Suporte">
-            Suporte
-          </a>
-          <a href="#" id="logoutMenu" class="menu-item logout">
-            <img src="exit.png" alt="Sair">
-            Sair
-          </a>
-        </div>
-      </div>
-    </header>
-
-    <div class="warning">
-      <strong>Aviso de segurança:</strong><br>
-      Esses APKs são hospedados no MediaFire. Baixe apenas se confiar na fonte. Verifique com antivírus (VirusTotal) antes de instalar. Ative "Fontes desconhecidas" no Android só temporariamente.
+    <div class="header">
+      <h1 id="formTitle">Entrar</h1>
+      <p id="formSubtitle">Use Google, email/senha, visitante ou token admin</p>
     </div>
 
-    <div class="grid">
+    <div id="alertBox"></div>
 
-      <div class="card">
-        <div class="card-header">Power Warriors</div>
-        <div class="card-body">
-          <img src="powerwarrios.png" alt="Power Warriors" class="game-icon">
-          <p>Versão 19.7 - Mod Menu + Última Versão + personagens desbloqueados</p>
-          <a href="https://www.mediafire.com/file/hjd4zyv8hrjfrxk/Power+Warriors_19.7.apk/file" target="_blank" class="btn-download">Baixar APK (19.7)</a>
+    <form id="authForm">
+
+      <div class="form-group cadastro-only">
+        <label for="nome">Nome completo</label>
+        <input type="text" id="nome" placeholder="Seu nome" autocomplete="name">
+      </div>
+
+      <div class="form-group">
+        <label for="email">E-mail</label>
+        <input type="email" id="email" placeholder="seuemail@exemplo.com" required autocomplete="email">
+      </div>
+
+      <div class="form-group">
+        <label for="password">Senha</label>
+        <div class="password-wrapper">
+          <input type="password" id="password" placeholder="••••••••" required autocomplete="current-password">
+          <button type="button" class="toggle-password" id="togglePass">
+            <i class="fas fa-eye" id="eyeIcon"></i>
+          </button>
         </div>
       </div>
 
-      <div class="card">
-        <div class="card-header">Clash Royale</div>
-        <div class="card-body">
-          <img src="ClashIcon.png" alt="Clash Royale" class="game-icon">
-          <p>Versão mais recente - Servidor Privado + Última Atualização + recursos desbloqueados</p>
-          <a href="https://www.mediafire.com/file/5jgo39jjp3x7o9y/ClashRoyale.apk/file" target="_blank" class="btn-download">Baixar APK</a>
+      <div class="form-group cadastro-only">
+        <label for="passwordConfirm">Confirmar senha</label>
+        <div class="password-wrapper">
+          <input type="password" id="passwordConfirm" placeholder="••••••••" autocomplete="new-password">
+          <button type="button" class="toggle-password" id="togglePassConfirm">
+            <i class="fas fa-eye" id="eyeIconConfirm"></i>
+          </button>
         </div>
       </div>
 
-      <div class="card">
-        <div class="card-header">Subway Surf</div>
-        <div class="card-body">
-          <img src="SubwayIcon.png" alt="Subway Surf ModMenu" class="game-icon">
-          <p>Versão mais recente - Mod Menu + Necessita de ADB</p>
-          <a href="https://www.mediafire.com/file/cohv3tohfsgm2zx/SubwaySuf.apk/file" target="_blank" class="btn-download">Baixar APK</a>
-        </div>
-      </div>
+      <button type="submit" class="btn btn-primary" id="submitBtn">Entrar</button>
 
-      <div class="card">
-        <div class="card-header">Shadown Fight 2</div>
-        <div class="card-body">
-          <img src="ShadowFight2.png" alt="Shadown Fight 2" class="game-icon">
-          <p>Dinheiro + Gemas infinitas + Versão atualizada</p>
-          <a href="https://www.mediafire.com/file/7av8bqrc6oog0lj/Shadow+Fight.apk/file" target="_blank" class="btn-download">Baixar APK</a>
-        </div>
-      </div>
+    </form>
 
+    <!-- Google Sign In -->
+    <div id="g_id_onload"
+         data-client_id="455017979288-segvpalrj7te0k0ue22pek5ku114gt4c.apps.googleusercontent.com"
+         data-callback="handleGoogleLogin"
+         data-auto_prompt="false">
     </div>
 
-    <footer>
-      Área logada como <strong id="userEmail">carregando...</strong> • Hospedado por você • 2026
-    </footer>
+    <button class="btn btn-google g_id_signin"
+            data-type="standard"
+            data-size="large"
+            data-theme="outline"
+            data-text="signin_with"
+            data-shape="rectangular"
+            data-logo_alignment="left">
+    </button>
+
+    <button class="btn btn-visitor" onclick="enterAsVisitor()">
+      👤 Entrar como Visitante
+    </button>
+
+    <button class="btn btn-admin" onclick="enterAsAdmin()">
+      🔑 Entrar como Administrador (token)
+    </button>
+
+    <div class="toggle-link">
+      <span id="toggleText">Ainda não tem conta?</span>
+      <a href="#" id="toggleMode">Criar conta</a>
+    </div>
 
   </div>
 
   <script>
-    if (localStorage.getItem('userLoggedIn') !== 'true') {
-      window.location.href = 'index.html';
-    }
+    let isCadastro = false;
+    let currentEmail = '';
 
-    const user = JSON.parse(localStorage.getItem('userData') || '{}');
-    document.getElementById('userEmail').textContent = user.email || 'Usuário';
-
-    const avatarEl = document.getElementById('userAvatar');
-    if (user.picture && user.loginMethod === 'google') {
-      avatarEl.src = user.picture;
-    }
-
-    const userProfile = document.getElementById('userAvatar');
-    const userMenu = document.getElementById('userMenu');
-
-    userProfile.addEventListener('click', (e) => {
-      e.stopPropagation();
-      userMenu.classList.toggle('active');
+    // Toggle cadastro / login
+    document.getElementById('toggleMode').addEventListener('click', (e) => {
+      e.preventDefault();
+      isCadastro = !isCadastro;
+      document.getElementById('authContainer').classList.toggle('is-cadastro', isCadastro);
+      document.getElementById('formTitle').textContent = isCadastro ? 'Criar conta' : 'Entrar';
+      document.getElementById('submitBtn').textContent = isCadastro ? 'Criar conta' : 'Entrar';
+      document.getElementById('toggleText').textContent = isCadastro ? 'Já tem conta?' : 'Ainda não tem conta?';
+      document.getElementById('toggleMode').textContent = isCadastro ? 'Fazer login' : 'Criar conta';
     });
 
-    document.addEventListener('click', (e) => {
-      if (!userMenu.contains(e.target) && !document.querySelector('.profile-wrapper').contains(e.target)) {
-        userMenu.classList.remove('active');
+    // Mostrar / esconder senha
+    function togglePassword(inputId, iconId) {
+      const input = document.getElementById(inputId);
+      const icon = document.getElementById(iconId);
+      if (input.type === 'password') {
+        input.type = 'text';
+        icon.classList.replace('fa-eye', 'fa-eye-slash');
+      } else {
+        input.type = 'password';
+        icon.classList.replace('fa-eye-slash', 'fa-eye');
+      }
+    }
+    document.getElementById('togglePass').addEventListener('click', () => togglePassword('password', 'eyeIcon'));
+    document.getElementById('togglePassConfirm').addEventListener('click', () => togglePassword('passwordConfirm', 'eyeIconConfirm'));
+
+    // Função auxiliar para mostrar alertas
+    function showAlert(message, type = 'error') {
+      const alertBox = document.getElementById('alertBox');
+      alertBox.innerHTML = `<div class="alert alert-${type}">${message}</div>`;
+      setTimeout(() => alertBox.innerHTML = '', 5000);
+    }
+
+    // Entrar como Visitante
+    function enterAsVisitor() {
+      const user = {
+        name: "Visitante",
+        email: "visitante@temp",
+        picture: "vistion.png",
+        loginMethod: "visitor",
+        loggedIn: true,
+        isVisitor: true
+      };
+      localStorage.setItem('userData', JSON.stringify(user));
+      localStorage.setItem('userLoggedIn', 'true');
+      window.location.href = 'dashboard.html';
+    }
+
+    // Entrar como Admin com token
+    function enterAsAdmin() {
+      const token = prompt("Digite o token de administrador:");
+      if (!token) return;
+
+      let adminData = null;
+
+      if (token === "fantasma2026") {
+        adminData = {
+          name: "Fantasma",
+          email: "fantasma@admin",
+          picture: "FantasmaIconUser.png",
+          loginMethod: "admin",
+          loggedIn: true,
+          isAdmin: true
+        };
+      } else if (token === "soneca2026") {
+        adminData = {
+          name: "Soneca",
+          email: "soneca@admin",
+          picture: "SonecaIconUser.png",
+          loginMethod: "admin",
+          loggedIn: true,
+          isAdmin: true
+        };
+      }
+
+      if (adminData) {
+        localStorage.setItem('userData', JSON.stringify(adminData));
+        localStorage.setItem('userLoggedIn', 'true');
+        window.location.href = 'dashboard.html';
+      } else {
+        showAlert("Token inválido! Tente novamente.", "error");
+      }
+    }
+
+    // Login Google
+    function handleGoogleLogin(response) {
+      try {
+        const payload = JSON.parse(atob(response.credential.split('.')[1]));
+        const user = {
+          name: payload.name || 'Usuário Google',
+          email: payload.email,
+          picture: payload.picture || '',
+          loginMethod: 'google',
+          loggedIn: true
+        };
+        localStorage.setItem('userData', JSON.stringify(user));
+        localStorage.setItem('userLoggedIn', 'true');
+        window.location.href = 'dashboard.html';
+      } catch (err) {
+        showAlert('Erro ao processar login com Google', 'error');
+      }
+    }
+
+    // Login / Cadastro com email (simulado - sem backend real)
+    document.getElementById('authForm').addEventListener('submit', (e) => {
+      e.preventDefault();
+
+      const email = document.getElementById('email').value.trim();
+      const password = document.getElementById('password').value;
+      const nome = isCadastro ? document.getElementById('nome').value.trim() : '';
+      const confirmPass = isCadastro ? document.getElementById('passwordConfirm').value : '';
+
+      if (!email || !password) {
+        showAlert('Preencha email e senha', 'error');
+        return;
+      }
+
+      if (password.length < 6) {
+        showAlert('A senha deve ter pelo menos 6 caracteres', 'error');
+        return;
+      }
+
+      if (isCadastro) {
+        if (!nome) {
+          showAlert('Digite seu nome', 'error');
+          return;
+        }
+        if (password !== confirmPass) {
+          showAlert('As senhas não coincidem', 'error');
+          return;
+        }
+
+        // Simula criação de conta
+        const user = {
+          name: nome,
+          email,
+          picture: '',
+          loginMethod: 'email',
+          loggedIn: true
+        };
+        localStorage.setItem('userData', JSON.stringify(user));
+        localStorage.setItem('userLoggedIn', 'true');
+        showAlert('Conta criada com sucesso!', 'success');
+        setTimeout(() => window.location.href = 'dashboard.html', 1200);
+      } else {
+        // Simula login
+        const user = {
+          name: email.split('@')[0],
+          email,
+          picture: '',
+          loginMethod: 'email',
+          loggedIn: true
+        };
+        localStorage.setItem('userData', JSON.stringify(user));
+        localStorage.setItem('userLoggedIn', 'true');
+        window.location.href = 'dashboard.html';
       }
     });
 
-    document.getElementById('logoutMenu').addEventListener('click', (e) => {
-      e.preventDefault();
-      localStorage.removeItem('userData');
-      localStorage.removeItem('userLoggedIn');
-      window.location.href = 'index.html';
-    });
+    // Redireciona se já estiver logado
+    if (localStorage.getItem('userLoggedIn') === 'true') {
+      window.location.href = 'dashboard.html';
+    }
   </script>
 
 </body>
