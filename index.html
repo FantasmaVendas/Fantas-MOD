@@ -228,11 +228,11 @@
       // Cadastro → envia código
       currentEmail = email;
       try {
-        const res = await fetch('https://fantasma.pythonanywhere.com/api/send-verification', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ email, nome })
-    })
+        const res = await fetch('http://127.0.0.1:5000/api/send-verification', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email, nome })
+        });
 
         const data = await res.json();
 
@@ -302,11 +302,11 @@
 
     document.getElementById('resendCode').addEventListener('click', async () => {
       try {
-        const res = await fetch('https://fantasma.pythonanywhere.com/api/send-verification', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ email, nome })
-    })
+        const res = await fetch('http://127.0.0.1:5000/api/send-verification', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email: currentEmail })
+        });
         const data = await res.json();
         if (data.success) {
           verificationCode = data.code;
@@ -327,4 +327,3 @@
   </script>
 </body>
 </html>
-
