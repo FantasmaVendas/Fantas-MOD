@@ -5,127 +5,49 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Login & Cadastro - Meus Jogos APK</title>
 
-  <!-- Google Identity Services -->
   <script src="https://accounts.google.com/gsi/client" async defer></script>
 
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" 
-        integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" 
-        crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
 
   <style>
     * { margin:0; padding:0; box-sizing:border-box; }
-    body {
-      font-family: system-ui, -apple-system, sans-serif;
-      min-height: 100vh;
-      background: linear-gradient(135deg, #e5e7eb, #f3f4f6);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 20px;
-      color: #111827;
-    }
-    .container {
-      background: white;
-      width: 100%;
-      max-width: 500px;               /* ← Aumentado para 500px (era 460px) */
-      padding: 3rem 2.5rem;           /* mais espaço interno também */
-      border-radius: 20px;
-      box-shadow: 0 12px 30px rgba(0,0,0,0.12);
-      border: 1px solid #e5e7eb;
-    }
+    body { font-family: system-ui, sans-serif; min-height: 100vh; background: linear-gradient(135deg, #e5e7eb, #f3f4f6); display: flex; align-items: center; justify-content: center; padding: 20px; color: #111827; }
+    .container { background: white; width: 100%; max-width: 500px; padding: 3rem 2.5rem; border-radius: 20px; box-shadow: 0 12px 30px rgba(0,0,0,0.12); border: 1px solid #e5e7eb; }
     .header { text-align: center; margin-bottom: 2.4rem; }
     .header h1 { font-size: 2.1rem; font-weight: 700; margin-bottom: 0.5rem; }
     .header p { color: #6b7280; font-size: 1rem; }
-
     .form-group { margin-bottom: 1.8rem; }
     label { display: block; margin-bottom: 0.6rem; font-size: 0.95rem; font-weight: 500; color: #374151; }
-    input {
-      width: 100%;
-      padding: 1rem 1.1rem;
-      border: 1px solid #d1d5db;
-      border-radius: 10px;
-      font-size: 1.05rem;
-      background: #f9fafb;
-    }
-    input:focus {
-      outline: none;
-      border-color: #6b7280;
-      box-shadow: 0 0 0 4px rgba(107,114,128,0.12);
-      background: white;
-    }
-
-    .password-wrapper {
-      position: relative;
-    }
-    .password-wrapper input {
-      padding-right: 4.2rem;
-    }
-    .toggle-password {
-      position: absolute;
-      right: 1.2rem;
-      top: 50%;
-      transform: translateY(-50%);
-      background: none;
-      border: none;
-      cursor: pointer;
-      width: 28px;
-      height: 28px;
-      padding: 0;
-    }
-    .toggle-password img {
-      width: 100%;
-      height: 100%;
-      object-fit: contain;
-    }
-
-    .btn {
-      width: 100%;
-      padding: 1rem;
-      border: none;
-      border-radius: 10px;
-      font-size: 1.05rem;
-      font-weight: 600;
-      cursor: pointer;
-      transition: all 0.2s;
-      margin: 0.8rem 0;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 12px;
-    }
-    .btn-primary,
-    .btn-visitor,
-    .btn-admin {
-      background: #111827;
-      color: white;
-    }
-    .btn-primary:hover,
-    .btn-visitor:hover,
-    .btn-admin:hover {
-      background: #1f2937;
-    }
-
-    .btn-google {
-      background: white;
-      border: 1px solid #d1d5db;
-      color: #111827;
-      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-    }
+    input { width: 100%; padding: 1rem 1.1rem; border: 1px solid #d1d5db; border-radius: 10px; font-size: 1.05rem; background: #f9fafb; }
+    input:focus { outline: none; border-color: #6b7280; box-shadow: 0 0 0 4px rgba(107,114,128,0.12); background: white; }
+    .password-wrapper { position: relative; }
+    .password-wrapper input { padding-right: 4.2rem; }
+    .toggle-password { position: absolute; right: 1.2rem; top: 50%; transform: translateY(-50%); background: none; border: none; cursor: pointer; width: 28px; height: 28px; padding: 0; }
+    .toggle-password img { width: 100%; height: 100%; object-fit: contain; }
+    .btn { width: 100%; padding: 1rem; border: none; border-radius: 10px; font-size: 1.05rem; font-weight: 600; cursor: pointer; transition: all 0.2s; margin: 0.8rem 0; display: flex; align-items: center; justify-content: center; gap: 12px; }
+    .btn-primary, .btn-visitor, .btn-admin { background: #111827; color: white; }
+    .btn-primary:hover, .btn-visitor:hover, .btn-admin:hover { background: #1f2937; }
+    .btn-google { background: white; border: 1px solid #d1d5db; color: #111827; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
     .btn-google:hover { background: #f8f9fa; }
-
     .toggle-link { text-align: center; margin-top: 1.6rem; font-size: 1rem; color: #6b7280; }
     .toggle-link a { color: #374151; font-weight: 500; text-decoration: none; }
     .cadastro-only { display: none; }
     .is-cadastro .cadastro-only { display: block; }
-
-    .alert {
-      padding: 1rem;
-      border-radius: 10px;
-      margin-bottom: 1.2rem;
-      font-size: 0.95rem;
-    }
+    .alert { padding: 1rem; border-radius: 10px; margin-bottom: 1.2rem; font-size: 0.95rem; }
     .alert-success { background: #d1fae5; color: #065f46; border: 1px solid #6ee7b7; }
     .alert-error   { background: #fee2e2;   color: #991b1b; border: 1px solid #fca5a5; }
+
+    /* Modal de código */
+    .modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.6); z-index: 2000; align-items: center; justify-content: center; }
+    .modal.active { display: flex; }
+    .modal-content { background: white; padding: 2.5rem 2rem; border-radius: 16px; width: 90%; max-width: 420px; text-align: center; box-shadow: 0 15px 40px rgba(0,0,0,0.3); }
+    .code-container { display: flex; justify-content: center; gap: 12px; margin: 2rem 0; }
+    .code-input { width: 50px; height: 60px; font-size: 2.2rem; font-weight: bold; text-align: center; border: 2px solid #d1d5db; border-radius: 10px; transition: all 0.2s; }
+    .code-input.correct { border-color: #10b981; background: #ecfdf5; color: #065f46; }
+    .code-input.incorrect { border-color: #ef4444; background: #fee2e2; color: #991b1b; }
+    .code-input:focus { border-color: #3b82f6; box-shadow: 0 0 0 3px rgba(59,130,246,0.3); outline: none; }
+    .resend { color: #2563eb; cursor: pointer; text-decoration: underline; margin-top: 1.5rem; display: block; }
+    .resend:hover { color: #1d4ed8; }
   </style>
 </head>
 <body>
@@ -175,28 +97,15 @@
 
     </form>
 
-    <!-- Google Sign In -->
-    <div id="g_id_onload"
-         data-client_id="455017979288-segvpalrj7te0k0ue22pek5ku114gt4c.apps.googleusercontent.com"
-         data-callback="handleGoogleLogin"
-         data-auto_prompt="false">
-    </div>
-
-    <button class="btn btn-google g_id_signin"
-            data-type="standard"
-            data-size="large"
-            data-theme="outline"
-            data-text="signin_with"
-            data-shape="rectangular"
-            data-logo_alignment="left">
-    </button>
+    <div id="g_id_onload" data-client_id="455017979288-segvpalrj7te0k0ue22pek5ku114gt4c.apps.googleusercontent.com" data-callback="handleGoogleLogin" data-auto_prompt="false"></div>
+    <button class="btn btn-google g_id_signin" data-type="standard" data-size="large" data-theme="outline" data-text="signin_with" data-shape="rectangular" data-logo_alignment="left"></button>
 
     <button class="btn btn-visitor" onclick="enterAsVisitor()">
-      <img src="visitors.png" alt="Visitante" style="width:22px; height:22px;"> Entrar como Visitante
+      <img src="visitors.png" alt="Visitante" style="width:22px;height:22px;"> Entrar como Visitante
     </button>
 
     <button class="btn btn-admin" onclick="enterAsAdmin()">
-      <img src="keyadm.png" alt="Admin" style="width:22px; height:22px;"> Entrar como Administrador
+      <img src="keyadm.png" alt="Admin" style="width:22px;height:22px;"> Entrar como Administrador
     </button>
 
     <div class="toggle-link">
@@ -206,8 +115,30 @@
 
   </div>
 
+  <!-- Modal de verificação -->
+  <div class="modal" id="verificationModal">
+    <div class="modal-content">
+      <h2>Verifique seu email</h2>
+      <p>Enviamos um código de 6 dígitos para<br><strong id="emailSent"></strong></p>
+
+      <div class="code-container">
+        <input type="text" class="code-input" maxlength="1" id="code1" autocomplete="off">
+        <input type="text" class="code-input" maxlength="1" id="code2" autocomplete="off">
+        <input type="text" class="code-input" maxlength="1" id="code3" autocomplete="off">
+        <input type="text" class="code-input" maxlength="1" id="code4" autocomplete="off">
+        <input type="text" class="code-input" maxlength="1" id="code5" autocomplete="off">
+        <input type="text" class="code-input" maxlength="1" id="code6" autocomplete="off">
+      </div>
+
+      <button class="btn btn-primary" id="verifyBtn">Verificar Código</button>
+      <span class="resend" id="resendCode">Não recebeu? Reenviar código</span>
+    </div>
+  </div>
+
   <script>
     let isCadastro = false;
+    let currentEmail = '';
+    let verificationCode = '';
 
     document.getElementById('toggleMode').addEventListener('click', (e) => {
       e.preventDefault();
@@ -219,7 +150,6 @@
       document.getElementById('toggleMode').textContent = isCadastro ? 'Fazer login' : 'Criar conta';
     });
 
-    // Mostrar / esconder senha com imagens
     function togglePassword(inputId, iconId) {
       const input = document.getElementById(inputId);
       const icon = document.getElementById(iconId);
@@ -233,26 +163,18 @@
         icon.alt = 'Mostrar senha';
       }
     }
-
     document.getElementById('togglePass').addEventListener('click', () => togglePassword('password', 'eyeIcon'));
     document.getElementById('togglePassConfirm').addEventListener('click', () => togglePassword('passwordConfirm', 'eyeIconConfirm'));
 
     function showAlert(message, type = 'error') {
-      const alertBox = document.getElementById('alertBox');
-      alertBox.innerHTML = `<div class="alert alert-${type}">${message}</div>`;
-      setTimeout(() => alertBox.innerHTML = '', 5000);
+      const box = document.getElementById('alertBox');
+      box.innerHTML = `<div class="alert alert-${type}">${message}</div>`;
+      setTimeout(() => box.innerHTML = '', 5000);
     }
 
+    // Entrar como Visitante e Admin (mantido)
     function enterAsVisitor() {
-      const user = {
-        name: "Visitante",
-        email: "visitante@temp",
-        picture: "visitors.png",
-        loginMethod: "visitor",
-        loggedIn: true,
-        isVisitor: true
-      };
-      localStorage.setItem('userData', JSON.stringify(user));
+      localStorage.setItem('userData', JSON.stringify({name:"Visitante", email:"visitante@temp", picture:"visitors.png", loginMethod:"visitor", loggedIn:true, isVisitor:true}));
       localStorage.setItem('userLoggedIn', 'true');
       window.location.href = 'dashboard.html';
     }
@@ -260,113 +182,129 @@
     function enterAsAdmin() {
       const token = prompt("Digite o token de administrador:");
       if (!token) return;
-
-      let adminData = null;
-
-      if (token === "fantasma2026") {
-        adminData = {
-          name: "Fantasma",
-          email: "fantasma@admin",
-          picture: "FantasmaIconUser.png",
-          loginMethod: "admin",
-          loggedIn: true,
-          isAdmin: true
-        };
-      } else if (token === "soneca2026") {
-        adminData = {
-          name: "Soneca",
-          email: "soneca@admin",
-          picture: "SonecaIconUser.png",
-          loginMethod: "admin",
-          loggedIn: true,
-          isAdmin: true
-        };
-      }
-
-      if (adminData) {
-        localStorage.setItem('userData', JSON.stringify(adminData));
+      let data = null;
+      if (token === "fantasma2026") data = {name:"Fantasma", email:"fantasma@admin", picture:"FantasmaIconUser.png", loginMethod:"admin", loggedIn:true, isAdmin:true};
+      else if (token === "soneca2026") data = {name:"Soneca", email:"soneca@admin", picture:"SonecaIconUser.png", loginMethod:"admin", loggedIn:true, isAdmin:true};
+      if (data) {
+        localStorage.setItem('userData', JSON.stringify(data));
         localStorage.setItem('userLoggedIn', 'true');
         window.location.href = 'dashboard.html';
       } else {
-        showAlert("Token inválido! Tente novamente.", "error");
+        showAlert("Token inválido!", "error");
       }
     }
 
+    // Google Login (mantido)
     function handleGoogleLogin(response) {
       try {
         const payload = JSON.parse(atob(response.credential.split('.')[1]));
-        const user = {
-          name: payload.name || 'Usuário Google',
-          email: payload.email,
-          picture: payload.picture || '',
-          loginMethod: 'google',
-          loggedIn: true
-        };
+        const user = {name: payload.name || 'Google User', email: payload.email, picture: payload.picture || '', loginMethod: 'google', loggedIn: true};
         localStorage.setItem('userData', JSON.stringify(user));
         localStorage.setItem('userLoggedIn', 'true');
         window.location.href = 'dashboard.html';
       } catch (err) {
-        showAlert('Erro ao processar login com Google', 'error');
+        showAlert('Erro no login Google', 'error');
       }
     }
 
-    document.getElementById('authForm').addEventListener('submit', (e) => {
+    // Cadastro com envio de código
+    document.getElementById('authForm').addEventListener('submit', async (e) => {
       e.preventDefault();
 
       const email = document.getElementById('email').value.trim();
       const password = document.getElementById('password').value;
-      const nome = isCadastro ? document.getElementById('nome').value.trim() : '';
-      const confirmPass = isCadastro ? document.getElementById('passwordConfirm').value : '';
+      const nome = isCadastro ? document.getElementById('nome')?.value.trim() : '';
+      const confirm = isCadastro ? document.getElementById('passwordConfirm')?.value : '';
 
-      if (!email || !password) {
-        showAlert('Preencha email e senha', 'error');
-        return;
-      }
+      if (!email || !password) return showAlert('Preencha email e senha', 'error');
+      if (isCadastro && (!nome || password !== confirm)) return showAlert('Dados incompletos ou senhas não coincidem', 'error');
+      if (password.length < 6) return showAlert('Senha muito curta (mínimo 6 caracteres)', 'error');
 
-      if (password.length < 6) {
-        showAlert('A senha deve ter pelo menos 6 caracteres', 'error');
-        return;
-      }
-
-      if (isCadastro) {
-        if (!nome) {
-          showAlert('Digite seu nome', 'error');
-          return;
-        }
-        if (password !== confirmPass) {
-          showAlert('As senhas não coincidem', 'error');
-          return;
-        }
-
-        const user = {
-          name: nome,
-          email,
-          picture: '',
-          loginMethod: 'email',
-          loggedIn: true
-        };
-        localStorage.setItem('userData', JSON.stringify(user));
-        localStorage.setItem('userLoggedIn', 'true');
-        showAlert('Conta criada com sucesso!', 'success');
-        setTimeout(() => window.location.href = 'dashboard.html', 1200);
-      } else {
-        const user = {
-          name: email.split('@')[0],
-          email,
-          picture: '',
-          loginMethod: 'email',
-          loggedIn: true
-        };
+      if (!isCadastro) {
+        // Login normal (sem código por enquanto)
+        const user = {name: email.split('@')[0], email, picture: '', loginMethod: 'email', loggedIn: true};
         localStorage.setItem('userData', JSON.stringify(user));
         localStorage.setItem('userLoggedIn', 'true');
         window.location.href = 'dashboard.html';
+        return;
+      }
+
+      // Cadastro → envia código
+      currentEmail = email;
+      try {
+        const res = await fetch('/api/send-verification', {  // ← seu backend Flask aqui
+          method: 'POST',
+          headers: {'Content-Type': 'application/json'},
+          body: JSON.stringify({ email, nome })
+        });
+        const data = await res.json();
+
+        if (!data.success) throw new Error(data.message || 'Erro ao enviar código');
+
+        verificationCode = data.code;  // ← o backend retorna o código (apenas para teste local)
+        document.getElementById('emailSent').textContent = email;
+        document.getElementById('verificationModal').classList.add('active');
+        document.getElementById('code1').focus();
+      } catch (err) {
+        showAlert(err.message || 'Erro ao enviar código', 'error');
       }
     });
 
-    if (localStorage.getItem('userLoggedIn') === 'true') {
-      window.location.href = 'dashboard.html';
-    }
-  </script>
+    // Lógica dos inputs de código
+    const inputs = document.querySelectorAll('.code-input');
+    inputs.forEach((input, idx) => {
+      input.addEventListener('input', e => {
+        if (e.target.value) {
+          input.classList.remove('incorrect', 'correct');
+          if (idx < 5) inputs[idx+1].focus();
+        }
+      });
+      input.addEventListener('keydown', e => {
+        if (e.key === 'Backspace' && !e.target.value && idx > 0) inputs[idx-1].focus();
+      });
+    });
 
+    document.getElementById('verifyBtn').addEventListener('click', () => {
+      let code = '';
+      inputs.forEach(i => code += i.value);
+
+      if (code.length !== 6) return showAlert('Digite os 6 dígitos', 'error');
+
+      const correct = code === verificationCode;
+
+      inputs.forEach(i => {
+        i.classList.toggle('correct', correct);
+        i.classList.toggle('incorrect', !correct);
+      });
+
+      if (correct) {
+        showAlert('Código correto! Conta criada.', 'success');
+        const user = {name: document.getElementById('nome')?.value || currentEmail.split('@')[0], email: currentEmail, picture: '', loginMethod: 'email', loggedIn: true};
+        localStorage.setItem('userData', JSON.stringify(user));
+        localStorage.setItem('userLoggedIn', 'true');
+        setTimeout(() => window.location.href = 'dashboard.html', 1500);
+      } else {
+        showAlert('Código incorreto', 'error');
+      }
+    });
+
+    document.getElementById('resendCode').addEventListener('click', async () => {
+      // Reenviar (chama o backend novamente)
+      try {
+        await fetch('/api/send-verification', {
+          method: 'POST',
+          headers: {'Content-Type': 'application/json'},
+          body: JSON.stringify({ email: currentEmail })
+        });
+        showAlert('Novo código enviado!', 'success');
+        inputs.forEach(i => { i.value = ''; i.classList.remove('correct','incorrect'); });
+        document.getElementById('code1').focus();
+      } catch (err) {
+        showAlert('Erro ao reenviar', 'error');
+      }
+    });
+
+    if (localStorage.getItem('userLoggedIn') === 'true') window.location.href = 'dashboard.html';
+  </script>
 </body>
 </html>
