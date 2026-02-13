@@ -134,17 +134,42 @@
     });
 
     const user = JSON.parse(localStorage.getItem('userData') || '{}');
-    if (user.picture && user.loginMethod === 'google') {
+    if (user.picture) {
       userAvatar.src = user.picture;
     }
 
-    // Autocomplete e destaque
+    // BLOQUEIO PARA VISITANTE
+    if (user.isVisitor) {
+      const commentDiv = document.getElementById('comment');
+      const sendBtn = document.querySelector('.btn-send');
+
+      commentDiv.contentEditable = false;
+      commentDiv.style.background = '#f3f4f6';
+      commentDiv.style.color = '#9ca3af';
+      commentDiv.style.cursor = 'not-allowed';
+      commentDiv.style.minHeight = '140px';
+      commentDiv.innerHTML = `
+        <div style="padding: 40px 20px; text-align: center; font-style: italic; color: #6b7280;">
+          👤 Modo Visitante<br><br>
+          Você não pode enviar comentários neste modo.<br>
+          Faça login com sua conta ou use token de administrador.
+        </div>
+      `;
+
+      if (sendBtn) {
+        sendBtn.style.display = 'none';
+      }
+    }
+
+    // Autocomplete e destaque (mantido original)
     const commentDiv = document.getElementById('comment');
     const suggestionsDiv = document.getElementById('suggestions');
 
     const mods = ["Power Warriors", "Clash Royale", "Subway Surf"];
 
     commentDiv.addEventListener('input', function(e) {
+      if (user.isVisitor) return; // impede autocomplete se for visitante
+
       const sel = window.getSelection();
       const range = sel.rangeCount > 0 ? sel.getRangeAt(0) : null;
       const offset = range ? range.startOffset : this.textContent.length;
@@ -161,16 +186,6 @@
       const modEnd = spacePos !== -1 ? spacePos : afterAt.length;
       const currentMod = afterAt.substring(1, modEnd).trim();
 
-      if (offset > atIndex && offset <= atIndex + currentMod.length + 1 &&
-          (e.inputType === 'deleteContentBackward' || e.inputType === 'deleteContentForward')) {
-        const before = text.substring(0, atIndex);
-        const after = text.substring(atIndex + currentMod.length + 1);
-        this.textContent = before + after;
-        setCursorAt(this, atIndex);
-        suggestionsDiv.style.display = 'none';
-        return;
-      }
-
       const query = currentMod.toLowerCase();
       const filtered = mods.filter(m => m.toLowerCase().includes(query));
 
@@ -186,9 +201,12 @@
             const newText = before + '@' + mod + ' ' + after;
             this.textContent = newText;
 
-            setCursorAt(this, atIndex + mod.length + 2);
-
-            applyHighlights(this);
+            const sel = window.getSelection();
+            const range = document.createRange();
+            range.setStart(this.childNodes[0] || this, atIndex + mod.length + 2);
+            range.collapse(true);
+            sel.removeAllRanges();
+            sel.addRange(range);
 
             suggestionsDiv.style.display = 'none';
           };
@@ -200,51 +218,12 @@
       }
     });
 
-    function applyHighlights(element) {
-      let html = element.innerHTML;
-      html = html.replace(/(@)([\w\s]+?)(?=\s|$)/g, (match, at, name) => {
-        if (mods.some(m => m.toLowerCase() === name.trim().toLowerCase())) {
-          return '<span class="mod-tag">' + at + name + '</span>';
-        }
-        return match;
-      });
-      element.innerHTML = html;
-    }
-
-    function setCursorAt(element, pos) {
-      const sel = window.getSelection();
-      const range = document.createRange();
-      let currentPos = 0;
-
-      function walk(node) {
-        if (node.nodeType === 3) {
-          if (currentPos + node.length >= pos) {
-            range.setStart(node, pos - currentPos);
-            range.collapse(true);
-            sel.removeAllRanges();
-            sel.addRange(range);
-            return true;
-          }
-          currentPos += node.length;
-        } else {
-          for (let i = 0; i < node.childNodes.length; i++) {
-            if (walk(node.childNodes[i])) return true;
-          }
-        }
-        return false;
-      }
-
-      walk(element);
-      element.focus();
-    }
-
-    document.addEventListener('click', (e) => {
-      if (!commentDiv.contains(e.target) && !suggestionsDiv.contains(e.target)) {
-        suggestionsDiv.style.display = 'none';
-      }
-    });
-
     function enviarComentario() {
+      if (user.isVisitor) {
+        alert("Visitantes não podem enviar comentários.");
+        return;
+      }
+
       const texto = commentDiv.textContent.trim();
       if (!texto) {
         alert("Escreva algo antes de enviar.");
@@ -254,6 +233,12 @@
       commentDiv.innerHTML = '';
       suggestionsDiv.style.display = 'none';
     }
+
+    document.addEventListener('click', (e) => {
+      if (!commentDiv.contains(e.target) && !suggestionsDiv.contains(e.target)) {
+        suggestionsDiv.style.display = 'none';
+      }
+    });
   </script>
 
 </body>
