@@ -138,7 +138,7 @@
   <script>
     let isCadastro = false;
     let currentEmail = '';
-    let verificationCode = '';
+    let verificationCode = ''; // será preenchido pelo backend
 
     document.getElementById('toggleMode').addEventListener('click', (e) => {
       e.preventDefault();
@@ -172,7 +172,6 @@
       setTimeout(() => box.innerHTML = '', 5000);
     }
 
-    // Entrar como Visitante e Admin (mantido)
     function enterAsVisitor() {
       localStorage.setItem('userData', JSON.stringify({name:"Visitante", email:"visitante@temp", picture:"visitors.png", loginMethod:"visitor", loggedIn:true, isVisitor:true}));
       localStorage.setItem('userLoggedIn', 'true');
@@ -194,7 +193,6 @@
       }
     }
 
-    // Google Login (mantido)
     function handleGoogleLogin(response) {
       try {
         const payload = JSON.parse(atob(response.credential.split('.')[1]));
@@ -221,7 +219,7 @@
       if (password.length < 6) return showAlert('Senha muito curta (mínimo 6 caracteres)', 'error');
 
       if (!isCadastro) {
-        // Login normal (sem código por enquanto)
+        // Login normal sem código (você pode adicionar verificação aqui se quiser)
         const user = {name: email.split('@')[0], email, picture: '', loginMethod: 'email', loggedIn: true};
         localStorage.setItem('userData', JSON.stringify(user));
         localStorage.setItem('userLoggedIn', 'true');
@@ -229,82 +227,114 @@
         return;
       }
 
-      // Cadastro → envia código
+      // Cadastro → envia código para o email real via backend
       currentEmail = email;
       try {
-        const res = await fetch('/api/send-verification', {  // ← seu backend Flask aqui
+        const res = await fetch('http://127.0.0.1:5000/api/send-verification', {  // ← mude para sua URL real depois
           method: 'POST',
-          headers: {'Content-Type': 'application/json'},
+          headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ email, nome })
         });
+
+        if (!res.ok) {
+          const text = await res.text();
+          throw new Error(`Erro do servidor: ${res.status} - ${text.substring(0, 100)}...`);
+        }
+
         const data = await res.json();
 
-        if (!data.success) throw new Error(data.message || 'Erro ao enviar código');
+        if (!data.success) throw new Error(data.message || 'Falha ao enviar código');
 
-        verificationCode = data.code;  // ← o backend retorna o código (apenas para teste local)
+        // Em produção: NÃO retorne o código no JSON! Use uma sessão ou token.
+        // Para teste local, o backend retorna o código
+        verificationCode = data.code;
         document.getElementById('emailSent').textContent = email;
         document.getElementById('verificationModal').classList.add('active');
         document.getElementById('code1').focus();
       } catch (err) {
-        showAlert(err.message || 'Erro ao enviar código', 'error');
+        console.error('Erro completo:', err);
+        showAlert(err.message || 'Erro ao conectar com o servidor. Verifique se o backend está rodando.', 'error');
       }
     });
 
-    // Lógica dos inputs de código
-    const inputs = document.querySelectorAll('.code-input');
-    inputs.forEach((input, idx) => {
-      input.addEventListener('input', e => {
-        if (e.target.value) {
-          input.classList.remove('incorrect', 'correct');
-          if (idx < 5) inputs[idx+1].focus();
+    // Lógica dos quadradinhos de código
+    const codeInputs = document.querySelectorAll('.code-input');
+    codeInputs.forEach((input, index) => {
+      input.addEventListener('input', (e) => {
+        if (e.target.value.length === 1) {
+          if (index < 5) codeInputs[index + 1].focus();
+        }
+        e.target.classList.remove('correct', 'incorrect');
+      });
+
+      input.addEventListener('keydown', (e) => {
+        if (e.key === 'Backspace' && !e.target.value && index > 0) {
+          codeInputs[index - 1].focus();
         }
       });
-      input.addEventListener('keydown', e => {
-        if (e.key === 'Backspace' && !e.target.value && idx > 0) inputs[idx-1].focus();
-      });
     });
 
+    // Verificar o código digitado
     document.getElementById('verifyBtn').addEventListener('click', () => {
-      let code = '';
-      inputs.forEach(i => code += i.value);
+      let entered = '';
+      codeInputs.forEach(i => entered += i.value);
 
-      if (code.length !== 6) return showAlert('Digite os 6 dígitos', 'error');
+      if (entered.length !== 6) return showAlert('Digite os 6 dígitos', 'error');
 
-      const correct = code === verificationCode;
+      const isCorrect = entered === verificationCode;
 
-      inputs.forEach(i => {
-        i.classList.toggle('correct', correct);
-        i.classList.toggle('incorrect', !correct);
+      codeInputs.forEach(inp => {
+        inp.classList.toggle('correct', isCorrect);
+        inp.classList.toggle('incorrect', !isCorrect);
       });
 
-      if (correct) {
+      if (isCorrect) {
         showAlert('Código correto! Conta criada.', 'success');
-        const user = {name: document.getElementById('nome')?.value || currentEmail.split('@')[0], email: currentEmail, picture: '', loginMethod: 'email', loggedIn: true};
+
+        const user = {
+          name: document.getElementById('nome')?.value || currentEmail.split('@')[0],
+          email: currentEmail,
+          picture: '',
+          loginMethod: 'email',
+          loggedIn: true
+        };
         localStorage.setItem('userData', JSON.stringify(user));
         localStorage.setItem('userLoggedIn', 'true');
-        setTimeout(() => window.location.href = 'dashboard.html', 1500);
+
+        setTimeout(() => {
+          document.getElementById('verificationModal').classList.remove('active');
+          window.location.href = 'dashboard.html';
+        }, 1500);
       } else {
-        showAlert('Código incorreto', 'error');
+        showAlert('Código incorreto. Tente novamente.', 'error');
       }
     });
 
+    // Reenviar código
     document.getElementById('resendCode').addEventListener('click', async () => {
-      // Reenviar (chama o backend novamente)
       try {
-        await fetch('/api/send-verification', {
+        const res = await fetch('http://127.0.0.1:5000/api/send-verification', {
           method: 'POST',
-          headers: {'Content-Type': 'application/json'},
+          headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ email: currentEmail })
         });
-        showAlert('Novo código enviado!', 'success');
-        inputs.forEach(i => { i.value = ''; i.classList.remove('correct','incorrect'); });
-        document.getElementById('code1').focus();
+        const data = await res.json();
+        if (data.success) {
+          verificationCode = data.code;
+          showAlert('Novo código enviado!', 'success');
+          codeInputs.forEach(i => { i.value = ''; i.classList.remove('correct','incorrect'); });
+          document.getElementById('code1').focus();
+        } else {
+          showAlert(data.message || 'Erro ao reenviar', 'error');
+        }
       } catch (err) {
-        showAlert('Erro ao reenviar', 'error');
+        showAlert('Erro ao reenviar código', 'error');
       }
     });
 
-    if (localStorage.getItem('userLoggedIn') === 'true') window.location.href = 'dashboard.html';
+    if (localStorage.getItem('userLoggedIn') === 'true') {
+      window.location.href = 'dashboard.html';
+    }
   </script>
 </body>
 </html>
