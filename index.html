@@ -37,7 +37,6 @@
     .alert-success { background: #d1fae5; color: #065f46; border: 1px solid #6ee7b7; }
     .alert-error   { background: #fee2e2;   color: #991b1b; border: 1px solid #fca5a5; }
 
-    /* Modal de código */
     .modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.6); z-index: 2000; align-items: center; justify-content: center; }
     .modal.active { display: flex; }
     .modal-content { background: white; padding: 2.5rem 2rem; border-radius: 16px; width: 90%; max-width: 420px; text-align: center; box-shadow: 0 15px 40px rgba(0,0,0,0.3); }
@@ -138,7 +137,7 @@
   <script>
     let isCadastro = false;
     let currentEmail = '';
-    let verificationCode = ''; // será preenchido pelo backend
+    let verificationCode = '';
 
     document.getElementById('toggleMode').addEventListener('click', (e) => {
       e.preventDefault();
@@ -205,7 +204,6 @@
       }
     }
 
-    // Cadastro com envio de código
     document.getElementById('authForm').addEventListener('submit', async (e) => {
       e.preventDefault();
 
@@ -219,7 +217,6 @@
       if (password.length < 6) return showAlert('Senha muito curta (mínimo 6 caracteres)', 'error');
 
       if (!isCadastro) {
-        // Login normal sem código (você pode adicionar verificação aqui se quiser)
         const user = {name: email.split('@')[0], email, picture: '', loginMethod: 'email', loggedIn: true};
         localStorage.setItem('userData', JSON.stringify(user));
         localStorage.setItem('userLoggedIn', 'true');
@@ -227,10 +224,9 @@
         return;
       }
 
-      // Cadastro → envia código para o email real via backend
       currentEmail = email;
       try {
-        const res = await fetch('http://127.0.0.1:5000/api/send-verification', {  // ← mude para sua URL real depois
+        const res = await fetch('http://127.0.0.1:5000/api/send-verification', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ email, nome })
@@ -238,26 +234,24 @@
 
         if (!res.ok) {
           const text = await res.text();
-          throw new Error(`Erro do servidor: ${res.status} - ${text.substring(0, 100)}...`);
+          console.log('Resposta do servidor (não JSON):', text.substring(0, 200));
+          throw new Error(`Erro do servidor: ${res.status} - Veja console para detalhes`);
         }
 
         const data = await res.json();
 
         if (!data.success) throw new Error(data.message || 'Falha ao enviar código');
 
-        // Em produção: NÃO retorne o código no JSON! Use uma sessão ou token.
-        // Para teste local, o backend retorna o código
         verificationCode = data.code;
         document.getElementById('emailSent').textContent = email;
         document.getElementById('verificationModal').classList.add('active');
         document.getElementById('code1').focus();
       } catch (err) {
         console.error('Erro completo:', err);
-        showAlert(err.message || 'Erro ao conectar com o servidor. Verifique se o backend está rodando.', 'error');
+        showAlert(err.message || 'Erro ao conectar com o servidor. Certifique-se de que o Python está rodando.', 'error');
       }
     });
 
-    // Lógica dos quadradinhos de código
     const codeInputs = document.querySelectorAll('.code-input');
     codeInputs.forEach((input, index) => {
       input.addEventListener('input', (e) => {
@@ -266,7 +260,6 @@
         }
         e.target.classList.remove('correct', 'incorrect');
       });
-
       input.addEventListener('keydown', (e) => {
         if (e.key === 'Backspace' && !e.target.value && index > 0) {
           codeInputs[index - 1].focus();
@@ -274,7 +267,6 @@
       });
     });
 
-    // Verificar o código digitado
     document.getElementById('verifyBtn').addEventListener('click', () => {
       let entered = '';
       codeInputs.forEach(i => entered += i.value);
@@ -290,7 +282,6 @@
 
       if (isCorrect) {
         showAlert('Código correto! Conta criada.', 'success');
-
         const user = {
           name: document.getElementById('nome')?.value || currentEmail.split('@')[0],
           email: currentEmail,
@@ -300,7 +291,6 @@
         };
         localStorage.setItem('userData', JSON.stringify(user));
         localStorage.setItem('userLoggedIn', 'true');
-
         setTimeout(() => {
           document.getElementById('verificationModal').classList.remove('active');
           window.location.href = 'dashboard.html';
@@ -310,7 +300,6 @@
       }
     });
 
-    // Reenviar código
     document.getElementById('resendCode').addEventListener('click', async () => {
       try {
         const res = await fetch('http://127.0.0.1:5000/api/send-verification', {
