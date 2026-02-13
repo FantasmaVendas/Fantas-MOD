@@ -31,10 +31,7 @@
     }
     h1 { font-size: 2.2rem; margin: 0; }
 
-    /* Área do usuário / menu */
-    .user-area {
-      position: relative;
-    }
+    .user-area { position: relative; }
     .profile-wrapper {
       position: relative;
       width: 48px;
@@ -43,22 +40,18 @@
     }
     .profile-circle {
       position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: url('images/circle.png') no-repeat center center;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: url('circle.png') no-repeat center center;
       background-size: contain;
-      border: 3px solid #00f0ff; /* borda ciano */
+      border: 3px solid #00f0ff;
       border-radius: 50%;
       pointer-events: none;
       z-index: 2;
       box-sizing: border-box;
     }
     .user-profile {
-      width: 70%;
-      height: 70%;
-      margin: 15%;
+      width: 70%; height: 70%; margin: 15%;
       border-radius: 50%;
       object-fit: cover;
       box-shadow: 0 2px 6px rgba(0,0,0,0.1);
@@ -68,9 +61,8 @@
     .user-menu {
       display: none;
       position: absolute;
-      top: 60px;
-      right: 0;
-      background: url('images/BackgroundMenu.png') no-repeat center center;
+      top: 60px; right: 0;
+      background: url('BackgroundMenu.png') no-repeat center center;
       background-size: cover;
       border-radius: 12px;
       box-shadow: 0 10px 25px rgba(0,0,0,0.18);
@@ -79,35 +71,18 @@
       overflow: hidden;
       border: 1px solid #e5e7eb;
     }
-    .user-menu.active {
-      display: block;
-    }
+    .user-menu.active { display: block; }
     .menu-item {
-      display: flex;
-      align-items: center;
-      gap: 12px;
+      display: flex; align-items: center; gap: 12px;
       padding: 12px 16px;
-      color: #111827;
-      text-decoration: none;
-      font-weight: 500;
+      color: #111827; text-decoration: none; font-weight: 500;
       transition: background 0.2s;
-      background: rgba(255, 255, 255, 0.7);
+      background: rgba(255,255,255,0.7);
     }
-    .menu-item:hover {
-      background: rgba(243, 244, 246, 0.9);
-    }
-    .menu-item img {
-      width: 24px;
-      height: 24px;
-      object-fit: contain;
-    }
-    .menu-item.logout {
-      color: #dc2626;
-      border-top: 1px solid #e5e7eb;
-    }
-    .menu-item.logout:hover {
-      background: rgba(254, 226, 226, 0.9);
-    }
+    .menu-item:hover { background: rgba(243,244,246,0.9); }
+    .menu-item img { width: 24px; height: 24px; object-fit: contain; }
+    .menu-item.logout { color: #dc2626; border-top: 1px solid #e5e7eb; }
+    .menu-item.logout:hover { background: rgba(254,226,226,0.9); }
 
     .warning {
       background: #fef3c7;
@@ -201,7 +176,7 @@
         <div class="profile-wrapper">
           <img 
             id="userAvatar" 
-            src="images/user.png" 
+            src="user.png" 
             alt="Perfil do usuário" 
             class="user-profile"
             onerror="this.src='https://www.clipartmax.com/png/middle/296-2969961_no-image-user-profile-icon.png';"
@@ -210,15 +185,15 @@
         </div>
         <div class="user-menu" id="userMenu">
           <a href="dashboard.html" class="menu-item">
-            <img src="images/home.png" alt="Home">
+            <img src="home.png" alt="Home">
             Home
           </a>
           <a href="suporte.html" class="menu-item">
-            <img src="images/support.png" alt="Suporte">
+            <img src="support.png" alt="Suporte">
             Suporte
           </a>
           <a href="#" id="logoutMenu" class="menu-item logout">
-            <img src="images/exit.png" alt="Sair">
+            <img src="exit.png" alt="Sair">
             Sair
           </a>
         </div>
@@ -231,7 +206,7 @@
     </div>
 
     <div class="grid">
-      <!-- Power Warriors -->
+
       <div class="card">
         <div class="card-header">Power Warriors</div>
         <div class="card-body">
@@ -241,7 +216,6 @@
         </div>
       </div>
 
-      <!-- Clash Royale -->
       <div class="card">
         <div class="card-header">Clash Royale</div>
         <div class="card-body">
@@ -250,8 +224,7 @@
           <a href="https://www.mediafire.com/file/5jgo39jjp3x7o9y/ClashRoyale.apk/file" target="_blank" class="btn-download">Baixar APK</a>
         </div>
       </div>
-      
-      <!-- Subway Surf -->
+
       <div class="card">
         <div class="card-header">Subway Surf</div>
         <div class="card-body">
@@ -260,17 +233,16 @@
           <a href="https://www.mediafire.com/file/cohv3tohfsgm2zx/SubwaySuf.apk/file" target="_blank" class="btn-download">Baixar APK</a>
         </div>
       </div>
-    </div>
 
-    <!-- Shadown Fight -->
       <div class="card">
         <div class="card-header">Shadown Fight 2</div>
         <div class="card-body">
-          <img src="ShadowFight2.png" alt="Subway Surf ModMenu" class="game-icon">
-          <p>Dinheiro + Gemas inffinitas + Versao atualizada</p>
+          <img src="ShadowFight2.png" alt="Shadown Fight 2" class="game-icon">
+          <p>Dinheiro + Gemas infinitas + Versão atualizada</p>
           <a href="https://www.mediafire.com/file/7av8bqrc6oog0lj/Shadow+Fight.apk/file" target="_blank" class="btn-download">Baixar APK</a>
         </div>
       </div>
+
     </div>
 
     <footer>
@@ -287,13 +259,11 @@
     const user = JSON.parse(localStorage.getItem('userData') || '{}');
     document.getElementById('userEmail').textContent = user.email || 'Usuário';
 
-    // Foto de perfil: Google se for login Google, senão user.png
     const avatarEl = document.getElementById('userAvatar');
     if (user.picture && user.loginMethod === 'google') {
       avatarEl.src = user.picture;
     }
 
-    // Toggle menu
     const userProfile = document.getElementById('userAvatar');
     const userMenu = document.getElementById('userMenu');
 
@@ -308,7 +278,6 @@
       }
     });
 
-    // Logout
     document.getElementById('logoutMenu').addEventListener('click', (e) => {
       e.preventDefault();
       localStorage.removeItem('userData');
@@ -317,5 +286,5 @@
     });
   </script>
 
-<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9cd609baaeb977f4',t:'MTc3MTAwMzY2Mi4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</body>
 </html>
